@@ -91,26 +91,6 @@ public class MainFormController implements Initializable {
     }
 
     @FXML
-    private void btn_pcPause_onAction(ActionEvent event) {
-
-    }
-
-    @FXML
-    private void btn_pcAbort_onAction(ActionEvent event) {
-
-    }
-
-    @FXML
-    private void btn_netPause_onAction(ActionEvent event) {
-
-    }
-
-    @FXML
-    private void btn_netAbort_onAction(ActionEvent event) {
-
-    }
-
-    @FXML
     private void mi_fullScreen_onAction(ActionEvent event) {
         getWindow().setFullScreen(true);
     }
@@ -192,6 +172,26 @@ public class MainFormController implements Initializable {
 
     @FXML
     private void btn_netStart_onAction(ActionEvent event) {
+    }
+    
+    @FXML
+    private void btn_pcPause_onAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    private void btn_pcAbort_onAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    private void btn_netPause_onAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    private void btn_netAbort_onAction(ActionEvent event) {
+
     }
 
     @FXML

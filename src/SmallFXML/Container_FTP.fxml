@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="680.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SmallFXML.Container_FTPController">
+   <children>
+      <CheckBox fx:id="cb_useServer" mnemonicParsing="false" onAction="#cb_useServer_onAction" text="Use FTP-Server Working-Directory">
+         <VBox.margin>
+            <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+         </VBox.margin>
+      </CheckBox>
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <VBox>
+               <children>
+                  <Label text="FTP-Server directory;">
+                     <VBox.margin>
+                        <Insets bottom="7.0" left="7.0" right="7.0" top="13.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Username:">
+                     <VBox.margin>
+                        <Insets bottom="7.0" left="7.0" right="7.0" top="13.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Password:">
+                     <VBox.margin>
+                        <Insets bottom="7.0" left="7.0" right="7.0" top="13.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox HBox.hgrow="ALWAYS">
+               <children>
+                  <TextField fx:id="tb_ServerPath">
+                     <VBox.margin>
+                        <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <TextField fx:id="tb_ServerUsername">
+                     <VBox.margin>
+                        <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <PasswordField fx:id="tb_ServerPassword">
+                     <VBox.margin>
+                        <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+                     </VBox.margin>
+                  </PasswordField>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <Label contentDisplay="CENTER" text="All images will be saved on the FTP-Server. The specified Destination will be overwriten and set to a computed value" textAlignment="CENTER" textFill="#9a0000" wrapText="true">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <VBox.margin>
+            <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+         </VBox.margin>
+      </Label>
+   </children>
+</VBox>

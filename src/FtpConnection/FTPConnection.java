@@ -5,11 +5,13 @@
  */
 package FtpConnection;
 
+import java.io.File;
+
 /**
  *
  * @author MarkTheSmasher
  */
-public class EmptyClass {
+public class FTPConnection {
 
     /*Wichtige Funktionen:
         * Konstruktor: FTP-Adresse, Username, Passwort --> Verbindung herstellen
