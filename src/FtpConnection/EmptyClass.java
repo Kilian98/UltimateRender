@@ -10,13 +10,20 @@ package FtpConnection;
  * @author MarkTheSmasher
  */
 public class EmptyClass {
-    
+
     /*Wichtige Funktionen:
         * Konstruktor: FTP-Adresse, Username, Passwort --> Verbindung herstellen
         * file.listFiles
         * file.copyFileToServer
         * file.copyFileFromServe
               
-        */
-    
+    */
+    //
+    //
+    /*
+        * Aufzählung aller Grafikkarten (List<Grafikkarte>)
+        * Grafikkarte.getName()
+        * Grafikkarte.getSystemName()
+        * 
+    */
 }
