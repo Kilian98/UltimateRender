@@ -28,5 +28,15 @@ public class FTPConnection {
         * Grafikkarte.getSystemName()
         * 
     */
-	private File f;
+    private String ip;
+    private String un;
+    private String pw;
+
+    public FTPConnection(String newip, String newun, String newpw) {
+        ip=newip;
+        un=newun;
+        pw=newpw;
+    }
+    
+    
 }
