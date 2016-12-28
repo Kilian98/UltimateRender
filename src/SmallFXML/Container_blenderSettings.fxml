@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SmallFXML.Container_blenderSettingsController">
+   <children>
+      <CheckBox fx:id="cb_AdjustRenderSettings" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cb_AdjustRenderSettings_onAction" text="Adjust Blender Rendering Settings" />
+      <TextField fx:id="tb_startFrame" disable="true" layoutX="96.0" layoutY="43.0" prefHeight="25.0" prefWidth="95.0" promptText="Start Frame" />
+      <TextField fx:id="tb_EndFrame" disable="true" layoutX="291.0" layoutY="43.0" prefHeight="25.0" prefWidth="95.0" promptText="End Frame" />
+      <Label layoutX="14.0" layoutY="47.0" text="Start Frame" />
+      <Label layoutX="206.0" layoutY="47.0" text="Start Frame" />
+      <Label layoutX="14.0" layoutY="88.0" text="Destination" />
+      <TextField fx:id="tb_destination" disable="true" layoutX="85.0" layoutY="84.0" prefHeight="25.0" prefWidth="295.0" promptText="Start Frame" />
+      <Label layoutX="392.0" layoutY="88.0" text="Image Format" />
+      <ChoiceBox fx:id="cb_imageFormat" disable="true" layoutX="490.0" layoutY="84.0" prefHeight="25.0" prefWidth="95.0" />
+      <CheckBox fx:id="cb_AllowCPU" layoutX="14.0" layoutY="125.0" mnemonicParsing="false" onAction="#cb_AllowCPU_onAction" selected="true" text="Allow CPU" />
+      <TextField fx:id="tb_Threads" layoutX="108.0" layoutY="121.0" prefHeight="25.0" prefWidth="28.0" />
+      <Label fx:id="lbl_Cernels" layoutX="137.0" layoutY="125.0" text="/8 Threads" />
+      <CheckBox fx:id="cb_AllowGPU" layoutX="270.0" layoutY="125.0" mnemonicParsing="false" onAction="#cb_AllowGPU_onAction" selected="true" text="Allow GPU" />
+      <Label fx:id="lbl_Renderer" layoutX="392.0" layoutY="125.0" text="Renderer: (unknown)" />
+   </children>
+   <padding>
+      <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+   </padding>
+</AnchorPane>
