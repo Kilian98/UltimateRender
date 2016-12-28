@@ -26,4 +26,5 @@ public class EmptyClass {
         * Grafikkarte.getSystemName()
         * 
     */
+	private File f;
 }
