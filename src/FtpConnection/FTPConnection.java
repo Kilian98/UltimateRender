@@ -9,7 +9,7 @@ package FtpConnection;
  *
  * @author MarkTheSmasher
  */
-public class EmptyClass {
+public class FTPConnection {
 
     /*Wichtige Funktionen:
         * Konstruktor: FTP-Adresse, Username, Passwort --> Verbindung herstellen
@@ -26,5 +26,15 @@ public class EmptyClass {
         * Grafikkarte.getSystemName()
         * 
     */
-	private File f;
+    private String ip;
+    private String un;
+    private String pw;
+
+    public FTPConnection(String newip, String newun, String newpw) {
+        ip=newip;
+        un=newun;
+        pw=newpw;
+    }
+    
+    
 }
