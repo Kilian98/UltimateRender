@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package SmallFXML;
+package FXMLContainer;
 
 import Exceptions.ReadBlenderException;
 import helpers.Actions;
@@ -57,17 +57,9 @@ public class Container_blenderSettingsController implements Initializable {
 
     private BlenderFile blenderFile;
     boolean linked = false; //Last check if Container and BlenderFile are linked
-    private String numbers = "0123456789";
-    @FXML
-    private CheckBox cb_AllowCPU;
-    @FXML
-    private TextField tb_Threads;
-    @FXML
-    private CheckBox cb_AllowGPU;
+    private final String numbers = "0123456789";
     @FXML
     private Label lbl_Renderer;
-    @FXML
-    private Label lbl_Cernels;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -99,10 +91,6 @@ public class Container_blenderSettingsController implements Initializable {
             tb_destination_onChange(oldValue, newValue);
         });
 
-        tb_Threads.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            tb_Threads_onChange(oldValue, newValue);
-        });
-
     }
 
     public void linkWithBlenderFile(BlenderFile file) {
@@ -116,19 +104,10 @@ public class Container_blenderSettingsController implements Initializable {
             tb_destination.setText(file.getPathToRender() + "");
             cb_imageFormat.getSelectionModel().select(Constants.ImageFormatToIndex.get(file.getFileFormat()));
 
-            cb_AllowCPU.setSelected(file.isAllowCPU());
-            cb_AllowGPU.setSelected(file.isAllowGPU());
-            tb_Threads.setText(file.getMaxThreads() + "");
-            lbl_Cernels.setText("/" + Runtime.getRuntime().availableProcessors() + " Threads");
-
             lbl_Renderer.setText("Renderer: " + file.getRenderer().toString());
-            if (file.getRenderer() == BlenderFile.Renderer.BlenderRenderer) {
-                cb_AllowGPU.setDisable(true);
-            }
 
             cb_AdjustRenderSettings.setSelected(file.isAdjustedSettings());
             cb_AdjustRenderSettings_onAction(null);
-            cb_AllowCPU_onAction(null);
         }
 
     }
@@ -195,25 +174,6 @@ public class Container_blenderSettingsController implements Initializable {
 
     private void tb_destination_onChange(String oldValue, String newValue) {
         blenderFile.setPathToRender(new File(newValue));
-    }
-
-    @FXML
-    private void cb_AllowCPU_onAction(ActionEvent event) {
-        blenderFile.setAllowCPU(cb_AllowCPU.isSelected());
-        tb_Threads.setDisable(!cb_AllowCPU.isSelected());
-    }
-
-    @FXML
-    private void cb_AllowGPU_onAction(ActionEvent event) {
-        blenderFile.setAllowGPU(cb_AllowGPU.isSelected());
-    }
-
-    private void tb_Threads_onChange(String oldValue, String newValue) {
-        if (!isOnlyNumbers(newValue)) {
-            tb_Threads.setText(oldValue);
-        } else {
-            blenderFile.setMaxThreads(parseInt(newValue));
-        }
     }
 
 }

@@ -22,6 +22,7 @@ import Exceptions.UnknownRendererException;
 import helpers.Actions;
 import static helpers.Actions.parseInt;
 import helpers.Constants;
+import static helpers.Information.getMaxCpuCernels;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -45,18 +46,17 @@ public class BlenderFile implements Serializable {
     private int endFrame;
 
     private boolean allowGPU; //for some projects the GPU memory is not sufficient for the rendering or Blender Renderer does not support GPU
-    private boolean allowCPU = true;
-    private int maxThreads = Runtime.getRuntime().availableProcessors();
+    private int maxThreads = getMaxCpuCernels();
 
     private Renderer renderer;
     private File pathToRender;
     private String fileFormat;
     private boolean adjustedSettings = false;
 
-    private File pathToRender_orig;
-    private String fileFormat_orig;
-    private int startFrame_orig;
-    private int endFrame_orig;
+    final private File pathToRender_orig;
+    final private String fileFormat_orig;
+    final private int startFrame_orig;
+    final private int endFrame_orig;
 
     /**
      * Creates a new BlenderFile. The required Information will be read out of
@@ -194,10 +194,6 @@ public class BlenderFile implements Serializable {
         this.endFrame = endFrame;
     }
 
-    public void setAllowGPU(boolean allowGPU) {
-        this.allowGPU = allowGPU;
-    }
-
     public void setRenderer(Renderer renderer) {
         this.renderer = renderer;
     }
@@ -212,14 +208,6 @@ public class BlenderFile implements Serializable {
 
     public void setAdjustedSettings(boolean adjustedSettings) {
         this.adjustedSettings = adjustedSettings;
-    }
-
-    public boolean isAllowCPU() {
-        return allowCPU;
-    }
-
-    public void setAllowCPU(boolean allowCPU) {
-        this.allowCPU = allowCPU;
     }
 
     public int getMaxThreads() {

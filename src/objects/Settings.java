@@ -17,6 +17,7 @@
 package objects;
 
 import helpers.Actions;
+import helpers.Information;
 import java.io.File;
 import java.io.Serializable;
 import javafx.stage.FileChooser;
@@ -31,6 +32,17 @@ public class Settings implements Serializable {
     private File pathToBlenderExe;
     private File pathToWorkingDirectory;
     private File pathToNetFile;
+
+    boolean allowCPU;
+    boolean allowGPU;
+
+    int sliderState;
+    
+    public Settings(){
+        allowCPU = true;
+        allowGPU = true;
+        sliderState = Information.getMaxCpuCernels();
+    }
 
     public File getPathToBlenderExe(Window window) {
 
@@ -64,13 +76,13 @@ public class Settings implements Serializable {
                 pathToBlenderExe = file;
                 System.out.println(pathToBlenderExe.toString());
                 break;
-            }else{
+            } else {
                 Actions.showAlert("Error", "This program is not able to work without a blender executable", "Please specify a valid blender.exe");
             }
         }
 
     }
-  
+
     public File getPathToWorkingDirectory() {
         return pathToWorkingDirectory;
     }
@@ -85,6 +97,30 @@ public class Settings implements Serializable {
 
     public void setPathToNetFile(File pathToNetFile) {
         this.pathToNetFile = pathToNetFile;
+    }
+
+    public boolean isAllowCPU() {
+        return allowCPU;
+    }
+
+    public void setAllowCPU(boolean allowCPU) {
+        this.allowCPU = allowCPU;
+    }
+
+    public boolean isAllowGPU() {
+        return allowGPU;
+    }
+
+    public void setAllowGPU(boolean allowGPU) {
+        this.allowGPU = allowGPU;
+    }
+
+    public int getSliderState() {
+        return sliderState;
+    }
+
+    public void setSliderState(int sliderState) {
+        this.sliderState = sliderState;
     }
 
 }

@@ -8,7 +8,7 @@ package FXML;
 import Exceptions.ParseException;
 import Exceptions.ReadBlenderException;
 import Exceptions.UnknownRendererException;
-import SmallFXML.Container_blenderSettingsController;
+import FXMLContainer.Container_blenderSettingsController;
 import helpers.Actions;
 import static helpers.Actions.saveClose;
 import helpers.Storage;
@@ -24,12 +24,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Orientation;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Separator;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -83,6 +85,11 @@ public class MainFormController implements Initializable {
         });
 
         Storage.loadSettings();
+
+        try {
+            lv_Queue_onChange(-1);
+        } catch (IOException ex) {
+        }
 
         names = FXCollections.observableArrayList(Storage.getFilesToRender());
 
@@ -145,6 +152,10 @@ public class MainFormController implements Initializable {
     private void refreshListView() {
         names.setAll(Storage.getFilesToRender());
         vbox_mid.getChildren().clear();
+        try {
+            lv_Queue_onChange(-1);
+        } catch (IOException ex) {
+        }
 
     }
 
@@ -154,26 +165,51 @@ public class MainFormController implements Initializable {
 
     private void lv_Queue_onChange(int newValue) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/SmallFXML/Container_blenderSettings.fxml"));
-        Parent root = loader.load();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXMLContainer/Container_blenderSettings.fxml"));
+        Parent root_blenderSettings = loader.load();
+        Container_blenderSettingsController controller_blenderSettings = (Container_blenderSettingsController) loader.getController();
+        controller_blenderSettings.linkWithBlenderFile((BlenderFile) lv_Queue.getSelectionModel().getSelectedItem());
 
-        Container_blenderSettingsController controller = (Container_blenderSettingsController) loader.getController();
-
-        controller.linkWithBlenderFile((BlenderFile) lv_Queue.getSelectionModel().getSelectedItem());
+        loader = new FXMLLoader(getClass().getResource("/FXMLContainer/Container_Settings.fxml"));
+        Parent root_generalSettings = loader.load();
 
         vbox_mid.getChildren().clear();
-        vbox_mid.getChildren().add(root);
+        vbox_mid.getChildren().add(root_generalSettings);
 
+        if (newValue != -1) {
+            vbox_mid.getChildren().add(new Separator(Orientation.HORIZONTAL));
+            vbox_mid.getChildren().add(root_blenderSettings);
+            vbox_mid.getChildren().add(new Separator(Orientation.HORIZONTAL));
+        }
     }
 
     @FXML
     private void btn_pcStart_onAction(ActionEvent event) {
+
+        if (!Storage.getSettings().isAllowCPU() && !Storage.getSettings().isAllowGPU()) {
+            Actions.showAlert("No rendering device", "Please select at least one rendering devive", "You cannot render without a rendering device");
+            return;
+        }
+
+        if (!Storage.getSettings().isAllowGPU() && Storage.getSettings().getSliderState() == 0) {
+            Actions.showAlert("No rendering device", "Please select a CPU usage value over 0% or an other rendering device", "You cannot render with a "
+                    + "usage of 0% and no other device");
+            return;
+        }
+        
+        System.out.println("starting rendering...");
+        
+        
+        //big todo
+        
+        
+        System.out.println("finished rendering!");
     }
 
     @FXML
     private void btn_netStart_onAction(ActionEvent event) {
     }
-    
+
     @FXML
     private void btn_pcPause_onAction(ActionEvent event) {
 

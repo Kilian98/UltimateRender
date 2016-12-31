@@ -33,4 +33,8 @@ public class Information {
         return false; //todo, check if there are threads running
     }
 
+    public static int getMaxCpuCernels() {
+        return Runtime.getRuntime().availableProcessors();
+    }
+
 }

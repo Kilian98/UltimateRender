@@ -24,7 +24,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import objects.BlenderFile;
 import objects.Settings;
@@ -112,6 +111,10 @@ public class Storage {
 
     public static void addFileToRender(BlenderFile file) {
         filesToRender.add(file);
+    }
+
+    public static Settings getSettings() {
+        return settings;
     }
 
 }

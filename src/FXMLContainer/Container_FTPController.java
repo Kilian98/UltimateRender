@@ -1,4 +1,4 @@
-package SmallFXML;
+package FXMLContainer;
 
 import java.net.URL;
 import java.util.ResourceBundle;
