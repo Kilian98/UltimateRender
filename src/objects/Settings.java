@@ -16,10 +16,14 @@
  */
 package objects;
 
+import static Graphic_board.BoardFinder.getGraphicBoards;
+import Graphic_board.Graphicboard;
 import helpers.Actions;
 import helpers.Information;
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
@@ -34,14 +38,15 @@ public class Settings implements Serializable {
     private File pathToNetFile;
 
     boolean allowCPU;
-    boolean allowGPU;
+    List<Graphicboard> gpus;
 
     int sliderState;
-    
-    public Settings(){
+
+    public Settings() {
         allowCPU = true;
-        allowGPU = true;
+        gpus = new ArrayList<>();
         sliderState = Information.getMaxCpuCernels();
+        gpus = getGraphicBoards();
     }
 
     public File getPathToBlenderExe(Window window) {
@@ -107,20 +112,37 @@ public class Settings implements Serializable {
         this.allowCPU = allowCPU;
     }
 
-    public boolean isAllowGPU() {
-        return allowGPU;
-    }
-
-    public void setAllowGPU(boolean allowGPU) {
-        this.allowGPU = allowGPU;
-    }
-
     public int getSliderState() {
         return sliderState;
     }
 
     public void setSliderState(int sliderState) {
         this.sliderState = sliderState;
+    }
+
+    public List<Graphicboard> getGpus() {
+        return gpus;
+    }
+
+    public void setGpus(List<Graphicboard> gpus) {
+        this.gpus = gpus;
+    }
+
+    /**
+     * *
+     * Looks up, if at least one GPU is selected
+     *
+     * @return true if one or more GPUs are selected
+     */
+    public boolean gpuAllowed() {
+
+        for (Graphicboard g : gpus) {
+            if (g.isAllowed()) {
+                return true;
+            }
+        }
+        return false;
+
     }
 
 }

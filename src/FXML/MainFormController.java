@@ -186,23 +186,20 @@ public class MainFormController implements Initializable {
     @FXML
     private void btn_pcStart_onAction(ActionEvent event) {
 
-        if (!Storage.getSettings().isAllowCPU() && !Storage.getSettings().isAllowGPU()) {
+        if (!Storage.getSettings().isAllowCPU() && !Storage.getSettings().gpuAllowed()) {
             Actions.showAlert("No rendering device", "Please select at least one rendering devive", "You cannot render without a rendering device");
             return;
         }
 
-        if (!Storage.getSettings().isAllowGPU() && Storage.getSettings().getSliderState() == 0) {
+        if (!Storage.getSettings().gpuAllowed() && Storage.getSettings().getSliderState() == 0) {
             Actions.showAlert("No rendering device", "Please select a CPU usage value over 0% or an other rendering device", "You cannot render with a "
                     + "usage of 0% and no other device");
             return;
         }
-        
+
         System.out.println("starting rendering...");
-        
-        
+
         //big todo
-        
-        
         System.out.println("finished rendering!");
     }
 

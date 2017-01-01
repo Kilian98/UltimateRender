@@ -9,14 +9,16 @@ import helpers.Information;
 import helpers.Storage;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.FlowPane;
 
 /**
  * FXML Controller class
@@ -30,9 +32,9 @@ public class Container_SettingsController implements Initializable {
     @FXML
     private Slider slider_MaxPerformance;
     @FXML
-    private CheckBox cb_AllowGPU;
-    @FXML
     private Label lbl_MaxUsage;
+    @FXML
+    private FlowPane vbox_Cards;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -40,14 +42,15 @@ public class Container_SettingsController implements Initializable {
         slider_MaxPerformance.setMax(Information.getMaxCpuCernels());
         slider_MaxPerformance.setValue(Storage.getSettings().getSliderState());
         lbl_MaxUsage.setText("Maximum CPU Usage: " + Math.round((double) slider_MaxPerformance.getValue() / Information.getMaxCpuCernels() * 100) + "%");
-        
+
         slider_MaxPerformance.valueProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
             lbl_MaxUsage.setText("Maximum CPU Usage: " + Math.round((double) newValue.intValue() / Information.getMaxCpuCernels() * 100) + "%");
             Storage.getSettings().setSliderState(newValue.intValue());
         });
-        
+
         cb_AllowCPU.setSelected(Storage.getSettings().isAllowCPU());
-        cb_AllowGPU.setSelected(Storage.getSettings().isAllowGPU());
+
+        initGPUs();
 
     }
 
@@ -56,9 +59,23 @@ public class Container_SettingsController implements Initializable {
         Storage.getSettings().setAllowCPU(cb_AllowCPU.isSelected());
     }
 
-    @FXML
-    private void cb_AllowGPU_onAction(ActionEvent event) {
-        Storage.getSettings().setAllowGPU(cb_AllowGPU.isSelected());
+    private void initGPUs() {
+
+        int cntr = 0;
+
+        for (Graphic_board.Graphicboard g : Storage.getSettings().getGpus()) {
+
+            final CheckBox cb = new CheckBox(g.getDisplayName());
+            final int i = cntr;
+            vbox_Cards.getChildren().add(cb);
+            FlowPane.setMargin(cb, new Insets(7));
+
+            cb.setOnAction((ActionEvent event) -> {
+                Storage.getSettings().getGpus().get(i).setAllowed(cb.isSelected());
+            });
+
+            cntr++;
+        }
     }
 
 }
