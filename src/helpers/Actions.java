@@ -1,5 +1,5 @@
-/*
- * Copyright (C) 2016 Kilian Brenner visit me on <aklio.de>
+/* 
+ * Copyright (C) 2017 kilian
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -109,7 +109,8 @@ public class Actions {
 //        ProcessBuilder pb = new ProcessBuilder("/home/kilian/Schreibtisch/blender-2.78a-linux-glibc211-x86_64/blender", "-b", blenderFile.toString(), "--python", pathToPythonFile.toString());
 //        ProcessBuilder pb = new ProcessBuilder("C:\\Program Files\\Blender Foundation\\Blender\\blender", "-b", blenderFile.toString(), "--python", pathToPythonFile.toString());
 //
-        ProcessBuilder pb = new ProcessBuilder(Storage.getPathToBlenderExe(window).toString(), "-b", blenderFile.toString(), "--python", pathToPythonFile.toString());
+        ProcessBuilder pb = new ProcessBuilder(Storage.getPathToBlenderExe(window).toString().replace(".desktop", ""), "-b", blenderFile.toString(),
+                "--python", pathToPythonFile.toString());
         pb.redirectErrorStream(true);
         Process p = pb.start();
         p.waitFor();

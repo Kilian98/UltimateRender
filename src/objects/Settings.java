@@ -1,5 +1,5 @@
-/*
- * Copyright (C) 2016 kilian
+/* 
+ * Copyright (C) 2017 kilian
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ public class Settings implements Serializable {
             fc.getExtensionFilters().addAll(
                     new FileChooser.ExtensionFilter("Blender Executable", "blender.exe*"),
                     new FileChooser.ExtensionFilter("All Executable Files", "*.exe*"),
-                    new FileChooser.ExtensionFilter("All Files", "*.**")
+                    new FileChooser.ExtensionFilter("All Files", "*")
             );
 
             fc.setTitle("Select the 'blender.exe' on your System");

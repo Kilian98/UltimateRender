@@ -1,5 +1,5 @@
-/*
- * Copyright (C) 2016 Kilian Brenner visit me on <aklio.de>
+/* 
+ * Copyright (C) 2017 kilian
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.stage.Window;
 import objects.BlenderFile;
+import objects.RenderQueue;
 import objects.Settings;
 
 /**
@@ -35,7 +36,7 @@ import objects.Settings;
 public class Storage {
 
     private static Settings settings = new Settings();
-    private static List<BlenderFile> filesToRender = new ArrayList<>();
+    private static RenderQueue queue = new RenderQueue();
 
     private static final File pathToSettings = new File(Paths.getSettingsPath());
     private static final File pathToQueue = new File(Paths.getQueuePath());
@@ -43,14 +44,14 @@ public class Storage {
     public static void loadSettings() {
 
         settings = (Settings) loadObject(pathToSettings, settings);
-        filesToRender = (List<BlenderFile>) loadObject(pathToQueue, filesToRender);
+        queue = (RenderQueue) loadObject(pathToQueue, queue);
 
     }
 
     public static void saveSettings() {
 
         saveObject(pathToSettings, settings);
-        saveObject(pathToQueue, filesToRender);
+        saveObject(pathToQueue, queue);
 
     }
 
@@ -102,15 +103,15 @@ public class Storage {
     }
 
     public static List<BlenderFile> getFilesToRender() {
-        return filesToRender;
+        return queue.getFilesToRender();
     }
 
     public static void setFilesToRender(List<BlenderFile> filesToRender) {
-        Storage.filesToRender = filesToRender;
+        queue.setFilesToRender(filesToRender);
     }
 
     public static void addFileToRender(BlenderFile file) {
-        filesToRender.add(file);
+        queue.getFilesToRender().add(file);
     }
 
     public static Settings getSettings() {
