@@ -136,6 +136,8 @@ public class Actions {
 
         }
 
+        pathToPythonFile.delete();
+
         return map;
 
     }

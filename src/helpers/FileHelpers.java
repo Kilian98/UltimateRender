@@ -63,7 +63,7 @@ public class FileHelpers {
         return true;
     }
 
-    public static void closeWriter(Writer writer) {
+    static void closeWriter(Writer writer) {
         if (writer != null) {
             try {
                 writer.close();
