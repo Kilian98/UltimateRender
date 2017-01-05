@@ -35,7 +35,11 @@ public class RenderQueue implements Serializable {
         tasks = new LinkedList<>();
     }
 
-    public void makeTasks(List<BlenderFile> files) {
+    public void makeTasks(List<BlenderFile> files, boolean overwrite) {
+
+        if (overwrite) {
+            tasks.clear();
+        }
 
         for (BlenderFile f : files) {
 
@@ -43,7 +47,7 @@ public class RenderQueue implements Serializable {
                 tasks.add(new RenderTask(f, i));
             }
         }
-        
+
     }
 
     //<editor-fold defaultstate="collapsed" desc="getters and setters">
@@ -55,7 +59,7 @@ public class RenderQueue implements Serializable {
         this.filesToRender = filesToRender;
     }
 
-    public List<RenderTask> getTasks() {
+    public LinkedList<RenderTask> getTasks() {
         return tasks;
     }
 

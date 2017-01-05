@@ -16,21 +16,22 @@
  */
 package objects;
 
+import java.io.Serializable;
+
 /**
  *
  * @author kilian
  */
-class RenderTask {
+public class RenderTask implements Serializable{
 
-    BlenderFile file;
-    int frame;
+    private BlenderFile file;
+    private int frame;
 
     public RenderTask(BlenderFile file, int frame) {
         this.file = file;
         this.frame = frame;
     }
-    
-    
+
     //<editor-fold defaultstate="collapsed" desc="getters and Setters">
     public BlenderFile getFile() {
         return file;

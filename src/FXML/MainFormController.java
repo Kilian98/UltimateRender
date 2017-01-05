@@ -20,8 +20,10 @@ import Exceptions.ParseException;
 import Exceptions.ReadBlenderException;
 import Exceptions.UnknownRendererException;
 import FXMLContainer.Container_blenderSettingsController;
+import Graphic_board.Graphicboard;
 import helpers.Actions;
 import static helpers.Actions.saveClose;
+import helpers.Information;
 import helpers.Storage;
 import java.io.File;
 import java.io.IOException;
@@ -49,6 +51,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import objects.BlenderFile;
+import objects.RenderThread;
 
 /**
  *
@@ -210,21 +213,37 @@ public class MainFormController implements Initializable {
 
         System.out.println("starting rendering...");
 
-        //big todo
-        System.out.println("finished rendering!");
-    }
+        Thread[] processes = new Thread[Storage.getSettings().getMaxInstancesPerDevice()
+                + Storage.getSettings().getGpus().size() * Storage.getSettings().getMaxInstancesPerDevice()];
+        Information.setThreads(processes);
 
-    @FXML
-    private void btn_netStart_onAction(ActionEvent event) {
+        int i = 0; //index for array
+
+        //Create CPU Threads
+        for (; i < Storage.getSettings().getMaxInstancesPerDevice(); i++) {
+            processes[i] = new RenderThread(null, getWindow());
+            processes[i].start();
+        }
+
+        //Create GPU Threads
+        for (Graphicboard b : Storage.getSettings().getGpus()) {
+            for (; i < Storage.getSettings().getMaxInstancesPerDevice() * (1 + Storage.getSettings().getGpus().size()); i++) {
+                processes[i] = new RenderThread(b, getWindow());
+                processes[i].start();
+            }
+        }
+
     }
 
     @FXML
     private void btn_pcPause_onAction(ActionEvent event) {
-
+        Information.setStopRendering(true);
     }
 
     @FXML
     private void btn_pcAbort_onAction(ActionEvent event) {
+
+        Information.abortRendering();
 
     }
 
@@ -236,6 +255,10 @@ public class MainFormController implements Initializable {
     @FXML
     private void btn_netAbort_onAction(ActionEvent event) {
 
+    }
+
+    @FXML
+    private void btn_netStart_onAction(ActionEvent event) {
     }
 
     @FXML

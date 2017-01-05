@@ -22,14 +22,15 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.FlowPane;
+import objects.RenderQueue;
 
 /**
  * FXML Controller class
@@ -46,6 +47,8 @@ public class Container_SettingsController implements Initializable {
     private Label lbl_MaxUsage;
     @FXML
     private FlowPane vbox_Cards;
+    @FXML
+    private Button btnRefreshTasks;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -88,6 +91,11 @@ public class Container_SettingsController implements Initializable {
 
             cntr++;
         }
+    }
+
+    @FXML
+    private void btnRefreshTasks_onAction(ActionEvent event) {
+        Storage.getQueue().makeTasks(Storage.getFilesToRender(), true);
     }
 
 }

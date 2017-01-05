@@ -22,11 +22,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import javafx.stage.Window;
 import objects.BlenderFile;
 import objects.RenderQueue;
+import objects.RenderTask;
 import objects.Settings;
 
 /**
@@ -110,12 +111,24 @@ public class Storage {
         queue.setFilesToRender(filesToRender);
     }
 
+    public static LinkedList<RenderTask> getRenderTasks() {
+        return queue.getTasks();
+    }
+
+    public static void setRenderTasks(LinkedList<RenderTask> tasks) {
+        queue.setTasks(tasks);
+    }
+
     public static void addFileToRender(BlenderFile file) {
         queue.getFilesToRender().add(file);
     }
 
     public static Settings getSettings() {
         return settings;
+    }
+
+    public static RenderQueue getQueue() {
+        return queue;
     }
 
 }

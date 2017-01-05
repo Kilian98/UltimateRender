@@ -33,6 +33,8 @@ import javafx.stage.Window;
  */
 public class Settings implements Serializable {
 
+    private int maxInstancesPerDevice;
+
     private File pathToBlenderExe;
     private File pathToWorkingDirectory;
     private File pathToNetFile;
@@ -47,6 +49,7 @@ public class Settings implements Serializable {
         gpus = new ArrayList<>();
         sliderState = Information.getMaxCpuCernels();
         gpus = getGraphicBoards();
+        maxInstancesPerDevice = 2;
     }
 
     public File getPathToBlenderExe(Window window) {
@@ -88,6 +91,7 @@ public class Settings implements Serializable {
 
     }
 
+    //<editor-fold defaultstate="collapsed" desc="getters and setters">
     public File getPathToWorkingDirectory() {
         return pathToWorkingDirectory;
     }
@@ -128,6 +132,14 @@ public class Settings implements Serializable {
         this.gpus = gpus;
     }
 
+    public int getMaxInstancesPerDevice() {
+        return maxInstancesPerDevice;
+    }
+
+    public void setMaxInstancesPerDevice(int maxInstancesPerDevice) {
+        this.maxInstancesPerDevice = maxInstancesPerDevice;
+    }
+
     /**
      * *
      * Looks up, if at least one GPU is selected
@@ -144,5 +156,5 @@ public class Settings implements Serializable {
         return false;
 
     }
-
+//</editor-fold>
 }

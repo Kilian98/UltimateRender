@@ -92,6 +92,7 @@ public class BlenderFile implements Serializable {
             allowGPU = false;
         } else if (tmp.equals("CYCLES")) {
             renderer = Renderer.CyclesRenderer;
+            allowGPU = true;
         } else {
             throw new UnknownRendererException();
         }

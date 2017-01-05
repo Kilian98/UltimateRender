@@ -33,6 +33,7 @@ public class Graphicboard implements Serializable{
     BoardType type;
     String systemName;
     boolean allowed;
+    int renderingFrames;
 
     public Graphicboard(String displayname, BoardType type, String systemName) {
 
@@ -41,6 +42,7 @@ public class Graphicboard implements Serializable{
         this.systemName = systemName;
 
         allowed = true;
+        renderingFrames = 0;
 
     }
 
@@ -52,8 +54,8 @@ public class Graphicboard implements Serializable{
         this.displayName = displayName;
     }
 
-    public BoardType getType() {
-        return type;
+    public String getType() {
+        return type.toString();
     }
 
     public void setType(BoardType type) {
@@ -75,5 +77,15 @@ public class Graphicboard implements Serializable{
     public void setAllowed(boolean allowed) {
         this.allowed = allowed;
     }
+
+    public int getRenderingFrames() {
+        return renderingFrames;
+    }
+
+    public void setRenderingFrames(int renderingFrames) {
+        this.renderingFrames = renderingFrames;
+    }
+    
+    
 
 }
