@@ -31,7 +31,7 @@ public class BoardFinder {
 
         //@Mark: todo: find all available graphic boards including Type, DisplayName and SystemName
         
-        liste.add(new Graphicboard("Nvidia GTX 660m", Graphicboard.BoardType.CUDA, "CUDA_0"));
+        liste.add(new Graphicboard("Unknown (Usable if CUDA/Nvidia)", Graphicboard.BoardType.CUDA, "CUDA_0"));
 
         return liste;
 
