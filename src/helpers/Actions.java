@@ -28,6 +28,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
+import objects.BlenderFile;
 
 /**
  *
@@ -53,6 +54,7 @@ public class Actions {
 
             if (result.get() == ButtonType.OK) {
                 Storage.saveSettings();
+                Information.abortRendering();
                 System.exit(0);
             } else if (event != null) {
                 event.consume();
@@ -150,6 +152,23 @@ public class Actions {
             return 0;
         }
 
+    }
+    
+    /**
+     * checks, if a File is in the render queue already
+     * @param f the path to the new File
+     * @return true, if the file already exists
+     */
+    public static boolean checkForExistingBlenderFile(File f){
+        
+        for (BlenderFile bf : Storage.getFilesToRender()){
+            if (bf.getPath().toString().equals(f.toString())){
+                return true;
+            }
+        }
+        
+        return false;
+        
     }
 
 }

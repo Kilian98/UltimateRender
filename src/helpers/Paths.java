@@ -16,26 +16,22 @@
  */
 package helpers;
 
+import java.io.File;
+
 /**
  *
  * @author kilian
  */
 public class Paths {
-    
-    private static String windowsSettingsPath = "UltimateRender\\settings.ul";
-    private static String linuxSettingsPath = "UltimateRender/settings.ul";
-    private static String macSettingsPath = "UltimateRender\\settings.ul";
-    
-    private static String windowsQueuePath = "UltimateRender\\queue.ul";
-    private static String linuxQueuePath = "UltimateRender/queue.ul";
-    private static String macQueuePath = "UltimateRender\\queue.ul";
-    
-    
-    public static String getSettingsPath(){
-        return linuxSettingsPath; //todo: check for running os
+
+    private static String SettingsPath = "UltimateRender\\settings.ul";
+    private static String QueuePath = "UltimateRender\\queue.ul";
+
+    public static String getSettingsPath() {
+        return SettingsPath.replace("\\", File.separator); //todo: check for running os
     }
-    
-    public static String getQueuePath(){
-        return linuxQueuePath; //todo: check for running os
+
+    public static String getQueuePath() {
+        return QueuePath.replace("\\", File.separator); //todo: check for running os
     }
 }
