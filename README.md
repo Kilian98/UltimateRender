@@ -11,5 +11,8 @@ This is the BETA-Channel, no warranty.
 Functions in the latest Beta:
   - Render multiple Blender Files with CPU and GPU at once
   - Change some settings from the file such as start-/endFrame and the file format (if needed; original settings will be displayed if you don't change them)
- 
-Tip: start with a console to get at least some information from the rendering, there is no window that provides information yet
+
+Added functions in the latest BETA:
+- Providing rendering information
+- Version runs on every OS now
+- bugfixes
