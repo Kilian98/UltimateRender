@@ -2,14 +2,8 @@
 
 This program is able to render Blender Files with the maximum Performance by using CPU and GPU at one time
 
-Additionally you can set up your own RenderFarm via your NAS or FTP Server
+Additionally you can set up your own RenderFarm with computers in the same network or via an FTP or NAS Server
 
 If you want to help with this program, contact us at <kilian@aklio.de>
 
-This is the BETA-Channel, no warranty.
-
-Functions in the latest Beta:
-  - Render multiple Blender Files with CPU and GPU at once
-  - Change some settings from the file such as start-/endFrame and the file format (if needed; original settings will be displayed if you don't change them)
- 
-Tip: start with a console to get at least some information from the rendering, there is no window that provides information yet
+This is the development branch, use of this version is not recommended. If you want to use the program, checkout the BetaChannel I created only for you.
