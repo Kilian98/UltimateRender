@@ -34,6 +34,7 @@ public class BoardFinder {
         liste.add(new Graphicboard("Unknown (Usable if CUDA/Nvidia)", Graphicboard.BoardType.CUDA, "CUDA_0"));
 
         return liste;
+        
 
     }
 
