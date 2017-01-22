@@ -22,7 +22,7 @@ import java.io.Serializable;
  *
  * @author kilian
  */
-public class RenderTask implements Serializable{
+public class RenderTask implements Serializable {
 
     private BlenderFile file;
     private int frame;
@@ -30,6 +30,11 @@ public class RenderTask implements Serializable{
     public RenderTask(BlenderFile file, int frame) {
         this.file = file;
         this.frame = frame;
+    }
+
+    @Override
+    public String toString() {
+        return "RenderTask{" + "file=" + file.getPath().getName() + ", frame=" + frame + '}';
     }
 
     //<editor-fold defaultstate="collapsed" desc="getters and Setters">

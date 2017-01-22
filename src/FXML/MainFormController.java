@@ -19,6 +19,7 @@ package FXML;
 import Exceptions.ParseException;
 import Exceptions.ReadBlenderException;
 import Exceptions.UnknownRendererException;
+import FXMLContainer.Container_InformationController;
 import FXMLContainer.Container_blenderSettingsController;
 import Graphic_board.Graphicboard;
 import helpers.Actions;
@@ -51,6 +52,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import objects.BlenderFile;
+import objects.InformationThread;
 import objects.RenderThread;
 
 /**
@@ -58,6 +60,8 @@ import objects.RenderThread;
  * @author Kilian Brenner visit me on <aklio.de>
  */
 public class MainFormController implements Initializable {
+
+    boolean containsBlenderContainer = false;
 
     private Label label;
     @FXML
@@ -100,14 +104,16 @@ public class MainFormController implements Initializable {
 
         Storage.loadSettings();
 
-        try {
-            lv_Queue_onChange(-1);
-        } catch (IOException ex) {
-        }
-
         names = FXCollections.observableArrayList(Storage.getFilesToRender());
 
         lv_Queue.setItems(names);
+
+        refreshListView();
+
+        try {
+            initContainer();
+        } catch (IOException ex) {
+        }
 
     }
 
@@ -143,16 +149,16 @@ public class MainFormController implements Initializable {
 
     }
 
-    public static void refreshLVSelction() {
-
-    }
-
     public void addBlenderFiles(List<File> list) {
 
         for (File f : list) {
 
             try {
-                Storage.addFileToRender(new BlenderFile(f, getWindow()));
+                if (!Actions.checkForExistingBlenderFile(f)) {
+                    Storage.addFileToRender(new BlenderFile(f, getWindow()));
+                }else{
+                    Actions.showAlert("File already in render queue", "The file is already in your render queue, it will not be added again", f.toString());
+                }
             } catch (ReadBlenderException | IOException | InterruptedException | UnknownRendererException | ParseException ex) {
                 Actions.showError("An error occured while trying to read a Blender File (.blend)", ex);
             }
@@ -164,12 +170,12 @@ public class MainFormController implements Initializable {
     }
 
     private void refreshListView() {
+
+        int selection = lv_Queue.getSelectionModel().getSelectedIndex();
+
         names.setAll(Storage.getFilesToRender());
-        vbox_mid.getChildren().clear();
-        try {
-            lv_Queue_onChange(-1);
-        } catch (IOException ex) {
-        }
+
+        lv_Queue.getSelectionModel().select(selection);
 
     }
 
@@ -179,22 +185,47 @@ public class MainFormController implements Initializable {
 
     private void lv_Queue_onChange(int newValue) throws IOException {
 
+//        System.out.println(containsBlenderContainer);
+        if (containsBlenderContainer) {
+            vbox_mid.getChildren().remove(3);
+            vbox_mid.getChildren().remove(2);
+        }
+
+        if (newValue == -1) {
+            containsBlenderContainer = false;
+            return;
+        }
+
+        containsBlenderContainer = true;
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXMLContainer/Container_blenderSettings.fxml"));
         Parent root_blenderSettings = loader.load();
         Container_blenderSettingsController controller_blenderSettings = (Container_blenderSettingsController) loader.getController();
         controller_blenderSettings.linkWithBlenderFile((BlenderFile) lv_Queue.getSelectionModel().getSelectedItem());
 
-        loader = new FXMLLoader(getClass().getResource("/FXMLContainer/Container_Settings.fxml"));
+//        System.out.println(vbox_mid.getChildren().size());
+
+        vbox_mid.getChildren().add(2, new Separator(Orientation.HORIZONTAL));
+        vbox_mid.getChildren().add(3, root_blenderSettings);
+
+    }
+
+    private void initContainer() throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXMLContainer/Container_Settings.fxml"));
         Parent root_generalSettings = loader.load();
+        loader = new FXMLLoader(getClass().getResource("/FXMLContainer/Container_Information.fxml"));
+        Parent root_Information = loader.load();
+        Container_InformationController infoController = (Container_InformationController) loader.getController();
+        Information.setInfoController(infoController);
 
-        vbox_mid.getChildren().clear();
+        vbox_mid.getChildren().add(new Separator(Orientation.HORIZONTAL));
         vbox_mid.getChildren().add(root_generalSettings);
+        vbox_mid.getChildren().add(new Separator(Orientation.HORIZONTAL));
+        vbox_mid.getChildren().add(root_Information);
+        vbox_mid.getChildren().add(new Separator(Orientation.HORIZONTAL));
 
-        if (newValue != -1) {
-            vbox_mid.getChildren().add(new Separator(Orientation.HORIZONTAL));
-            vbox_mid.getChildren().add(root_blenderSettings);
-            vbox_mid.getChildren().add(new Separator(Orientation.HORIZONTAL));
-        }
+        new InformationThread().start();
     }
 
     @FXML
@@ -211,9 +242,10 @@ public class MainFormController implements Initializable {
             return;
         }
 
+        Information.setStopRendering(false);
         System.out.println("starting rendering...");
 
-        Thread[] processes = new Thread[Storage.getSettings().getMaxInstancesPerDevice()
+        RenderThread[] processes = new RenderThread[Storage.getSettings().getMaxInstancesPerDevice()
                 + Storage.getSettings().getGpus().size() * Storage.getSettings().getMaxInstancesPerDevice()];
         Information.setThreads(processes);
 
@@ -233,17 +265,21 @@ public class MainFormController implements Initializable {
             }
         }
 
+        Information.setStatus(Information.Status.Rendering);
+
     }
 
     @FXML
     private void btn_pcPause_onAction(ActionEvent event) {
         Information.setStopRendering(true);
+        Information.setStatus(Information.Status.Pausing);
     }
 
     @FXML
     private void btn_pcAbort_onAction(ActionEvent event) {
 
         Information.abortRendering();
+        Information.setStatus(Information.Status.Stopped);
 
     }
 

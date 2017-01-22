@@ -56,8 +56,6 @@ public class UltimateRender extends Application {
             saveClose(event);
         });
 
-        stage.setWidth(800);
-        stage.setHeight(550);
         stage.setMinHeight(450);
         stage.setMinWidth(550);
         stage.setResizable(true);

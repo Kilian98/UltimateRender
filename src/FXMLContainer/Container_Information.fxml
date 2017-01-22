@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXMLContainer.Container_InformationController">
+   <children>
+      <VBox HBox.hgrow="ALWAYS">
+         <children>
+            <Label fx:id="lbl_status" text="Status:">
+               <VBox.margin>
+                  <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="lbl_renderedFrames" text="Rendered Frames:">
+               <VBox.margin>
+                  <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="lbl_remainingFrames" text="Remaining Frames:">
+               <VBox.margin>
+                  <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+         <HBox.margin>
+            <Insets />
+         </HBox.margin>
+      </VBox>
+      <Separator orientation="VERTICAL" prefHeight="200.0" />
+      <VBox HBox.hgrow="ALWAYS">
+         <children>
+            <Label fx:id="lbl_localRenderingThreads" text="Local rendering threads:">
+               <VBox.margin>
+                  <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="lbl_localWaitingThreads" text="Local waiting threads:">
+               <VBox.margin>
+                  <Insets bottom="21.0" left="7.0" right="7.0" top="7.0" />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="lbl_pcsConnected" text="Computers connected: 0">
+               <VBox.margin>
+                  <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="lbl_extRenderingThreads" text="External rendering threads: /">
+               <VBox.margin>
+                  <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="lbl_ConnectionThreads" text="Connection threads: /">
+               <VBox.margin>
+                  <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+         <HBox.margin>
+            <Insets />
+         </HBox.margin>
+      </VBox>
+   </children>
+</HBox>

@@ -39,6 +39,8 @@ public class Settings implements Serializable {
     private File pathToWorkingDirectory;
     private File pathToNetFile;
 
+    private int refreshMillis = 500;
+
     boolean allowCPU;
     List<Graphicboard> gpus;
 
@@ -138,6 +140,14 @@ public class Settings implements Serializable {
 
     public void setMaxInstancesPerDevice(int maxInstancesPerDevice) {
         this.maxInstancesPerDevice = maxInstancesPerDevice;
+    }
+
+    public int getRefreshMillis() {
+        return refreshMillis;
+    }
+
+    public void setRefreshMillis(int refreshMillis) {
+        this.refreshMillis = refreshMillis;
     }
 
     /**

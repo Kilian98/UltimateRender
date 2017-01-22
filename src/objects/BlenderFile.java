@@ -120,14 +120,28 @@ public class BlenderFile implements Serializable {
 
         tmp = map.get(4);
 
-        if (tmp.startsWith("\\") || tmp.startsWith("/")) {
-            tmp = path.getParent() + "\\" + tmp.substring(1);
-        }
+        if (tmp.startsWith("//")) {
 
-        if (tmp.endsWith("/") || tmp.endsWith("\\")) {
-            tmp = tmp.substring(0, tmp.length() - 1);
-        }
+            File currentDir = path.getParentFile();
+            String[] splitted = tmp.substring(2).split(File.separator);
+            String lastPath = "";
 
+            for (String s : splitted) {
+                if (s.equals("..")) {
+                    currentDir = currentDir.getParentFile();
+                } else {
+                    lastPath += s + File.separator;
+                }
+            }
+
+            tmp = currentDir.toString() + File.separator + lastPath.substring(0, lastPath.length() - 1);
+
+        }
+        
+        if (tmp.endsWith(File.separator)){
+            tmp += path.getName().split("\\.");
+        }
+        
         pathToRender = new File(tmp);
         pathToRender_orig = new File(tmp);
 

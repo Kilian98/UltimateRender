@@ -24,8 +24,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.stage.Window;
 
 /**
@@ -36,6 +34,14 @@ public class RenderThread extends Thread {
 
     private Graphicboard board;
     private final Window window;
+    private ThreadState threadState;
+
+    public enum ThreadState {
+        renderingGPU,
+        renderingCPU,
+        waitingGPU,
+        waitingCPU
+    }
 
     public RenderThread(Graphicboard board, Window window) {
         this.board = board;
@@ -53,11 +59,13 @@ public class RenderThread extends Thread {
     @Override
     public void run() {
 
-        while (!Information.isStopRendering() && !Storage.getRenderTasks().isEmpty()) {
+
+        while (!Information.isStopRendering()) {
 
             if (board == null) {
                 if (!Storage.getSettings().isAllowCPU()) {
                     try {
+                        threadState = ThreadState.waitingCPU;
                         Thread.sleep(1000);
                         continue;
                     } catch (InterruptedException ex) {
@@ -65,17 +73,24 @@ public class RenderThread extends Thread {
                 }
             } else if (!board.isAllowed()) {
                 try {
+                    threadState = ThreadState.waitingGPU;
                     Thread.sleep(1000);
                     continue;
                 } catch (InterruptedException ex) {
                 }
             }
 
+            if (board == null) {
+                threadState = ThreadState.renderingCPU;
+            } else {
+                threadState = ThreadState.renderingGPU;
+            }
+
             RenderTask task;
 
             synchronized (Information.getSynchronizer()) {
                 if (!Storage.getRenderTasks().isEmpty()) {
-                    task = Storage.getRenderTasks().removeFirst();
+                    task = Storage.getRenderTasks().removeFirst(); //todo: check if isSlave and gather value
                 } else {
                     break;
                 }
@@ -83,6 +98,13 @@ public class RenderThread extends Thread {
 
             if (task.getFrame() > task.getFile().getEndFrame() || task.getFrame() < task.getFile().getStartFrame()) {
                 System.out.println("Skipped Frame: " + task.getFrame());
+                Information.increaseFramesRendered(1);
+                continue;
+            }
+
+            if (!Storage.getFilesToRender().contains(task.getFile())) {
+                System.out.println("File not in Files to Render: " + task.getFile().getPath().getName());
+                Information.fixTaskList(task.getFile());
                 continue;
             }
 
@@ -95,7 +117,7 @@ public class RenderThread extends Thread {
                         + "bpy.context.user_preferences.system.compute_device = \"" + board.getSystemName() + "\"";
             }
 
-            File pythonFile = new File(task.getFile().getPath().getParent() + "/" + task.getFile().getPath().getName().split("\\.")[0] + task.getFrame() + ".py");
+            File pythonFile = new File(task.getFile().getPath().getParent() + File.separator + task.getFile().getPath().getName().split("\\.")[0] + task.getFrame() + ".py");
             FileHelpers.writeFile(pythonFile, pythonContent);
 
             ProcessBuilder pb = new ProcessBuilder(
@@ -124,13 +146,15 @@ public class RenderThread extends Thread {
                 while (bri.readLine() != null) {
                     if (Thread.interrupted()) {
                         p.destroy();
-                        System.out.println("interrupt");
-                        break;
+                        System.out.println("Thread " + this.getId() + " was shutdown");
+                        Storage.getRenderTasks().addFirst(task);
+                        return;
                     }
 
                 }
 
-                System.out.println("rendered frame: " + task.getFrame());
+                System.out.println("rendered task: " + task);
+                Information.increaseFramesRendered(1);
 
             } catch (IOException ex) {
             } catch (Exception ex) {
@@ -143,8 +167,12 @@ public class RenderThread extends Thread {
 
         }
 
-        System.out.println("Task finished");
+        System.out.println("Thread " + this.getId() + " finished");
 
+    }
+
+    public ThreadState getThreadState() {
+        return threadState;
     }
 
 }

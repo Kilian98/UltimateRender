@@ -96,6 +96,7 @@ public class Container_SettingsController implements Initializable {
     @FXML
     private void btnRefreshTasks_onAction(ActionEvent event) {
         Storage.getQueue().makeTasks(Storage.getFilesToRender(), true);
+        Information.clearFramesRendered();
     }
 
 }

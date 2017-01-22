@@ -29,6 +29,7 @@ public class RenderQueue implements Serializable {
 
     private List<BlenderFile> filesToRender;
     private LinkedList<RenderTask> tasks;
+    private int framesRendered;
 
     public RenderQueue() {
         filesToRender = new ArrayList<>();
@@ -66,6 +67,14 @@ public class RenderQueue implements Serializable {
     public void setTasks(LinkedList<RenderTask> tasks) {
         this.tasks = tasks;
     }
-//</editor-fold>
 
+    public int getFramesRendered() {
+        return framesRendered;
+    }
+
+    public void setFramesRendered(int framesRendered) {
+        this.framesRendered = framesRendered;
+    }
+
+//</editor-fold>
 }

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
 Copyright (C) 2017 kilian
 
@@ -23,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="379.0" prefWidth="537.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXML.MainFormController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="549.0" prefWidth="923.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXML.MainFormController">
     <top>
         <MenuBar fx:id="MenuBar" BorderPane.alignment="CENTER">
             <menus>
@@ -45,7 +46,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </MenuBar>
     </top>
     <center>
-        <SplitPane dividerPositions="0.7271028037383177" BorderPane.alignment="CENTER">
+        <SplitPane dividerPositions="0.6872964169381107" BorderPane.alignment="CENTER">
             <items>
             <ScrollPane prefViewportHeight="373.0" prefViewportWidth="409.0">
                <content>
@@ -78,7 +79,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                                 <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
                                              </VBox.margin>
                                           </Button>
-                                                        <Button fx:id="btn_pcPause" mnemonicParsing="false" onAction="#btn_pcPause_onAction" text="Stop">
+                                                        <Button fx:id="btn_pcPause" mnemonicParsing="false" onAction="#btn_pcPause_onAction" text="Exit after Frame">
                                                             <VBox.margin>
                                                                 <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
                                                             </VBox.margin>
@@ -103,7 +104,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                                 <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
                                              </VBox.margin>
                                           </Button>
-                                                        <Button fx:id="btn_netPause" mnemonicParsing="false" onAction="#btn_netPause_onAction" text="Stop">
+                                                        <Button fx:id="btn_netPause" mnemonicParsing="false" onAction="#btn_netPause_onAction" text="Exit after Frame">
                                                             <VBox.margin>
                                                                 <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
                                                             </VBox.margin>

@@ -46,6 +46,8 @@ public class Storage {
 
         settings = (Settings) loadObject(pathToSettings, settings);
         queue = (RenderQueue) loadObject(pathToQueue, queue);
+        
+        Information.setFramesRendered(queue.getFramesRendered());
 
     }
 
