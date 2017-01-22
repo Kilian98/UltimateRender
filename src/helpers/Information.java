@@ -53,6 +53,8 @@ public class Information {
 
     static long timeRendering;
 
+    static private int threadsRunning;
+
     /**
      * *
      * You may check, if there are threads running in the background e.g. before

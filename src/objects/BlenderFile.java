@@ -139,7 +139,7 @@ public class BlenderFile implements Serializable {
         }
         
         if (tmp.endsWith(File.separator)){
-            tmp += path.getName().split("\\.");
+            tmp += path.getName().split("\\.")[0];
         }
         
         pathToRender = new File(tmp);

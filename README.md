@@ -5,4 +5,11 @@ This program is able to render Blender Files with the maximum Performance by usi
 Additionally you can set up your own RenderFarm via your NAS or FTP Server
 
 If you want to help with this program, contact us at <kilian@aklio.de>
-The program is still in development and not usable
+
+This is the BETA-Channel, no warranty.
+
+Functions in the latest Beta:
+  - Render multiple Blender Files with CPU and GPU at once
+  - Change some settings from the file such as start-/endFrame and the file format (if needed; original settings will be displayed if you don't change them)
+ 
+Tip: start with a console to get at least some information from the rendering, there is no window that provides information yet
