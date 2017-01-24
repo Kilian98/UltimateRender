@@ -90,6 +90,8 @@ public class MainFormController implements Initializable {
     private Button btn_pcStart;
     @FXML
     private Button btn_netStart;
+    @FXML
+    private MenuItem mi_toggleTCP;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -156,7 +158,7 @@ public class MainFormController implements Initializable {
             try {
                 if (!Actions.checkForExistingBlenderFile(f)) {
                     Storage.addFileToRender(new BlenderFile(f, getWindow()));
-                }else{
+                } else {
                     Actions.showAlert("File already in render queue", "The file is already in your render queue, it will not be added again", f.toString());
                 }
             } catch (ReadBlenderException | IOException | InterruptedException | UnknownRendererException | ParseException ex) {
@@ -204,7 +206,6 @@ public class MainFormController implements Initializable {
         controller_blenderSettings.linkWithBlenderFile((BlenderFile) lv_Queue.getSelectionModel().getSelectedItem());
 
 //        System.out.println(vbox_mid.getChildren().size());
-
         vbox_mid.getChildren().add(2, new Separator(Orientation.HORIZONTAL));
         vbox_mid.getChildren().add(3, root_blenderSettings);
 
@@ -214,14 +215,22 @@ public class MainFormController implements Initializable {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXMLContainer/Container_Settings.fxml"));
         Parent root_generalSettings = loader.load();
+
         loader = new FXMLLoader(getClass().getResource("/FXMLContainer/Container_Information.fxml"));
         Parent root_Information = loader.load();
         Container_InformationController infoController = (Container_InformationController) loader.getController();
         Information.setInfoController(infoController);
 
+        loader = new FXMLLoader(getClass().getResource("/FXMLContainer/Container_TCP.fxml"));
+        Parent root_TCP = loader.load();
+
         vbox_mid.getChildren().add(new Separator(Orientation.HORIZONTAL));
         vbox_mid.getChildren().add(root_generalSettings);
         vbox_mid.getChildren().add(new Separator(Orientation.HORIZONTAL));
+        if (Storage.getSettings().isShowTCP()) {
+            vbox_mid.getChildren().add(root_TCP);
+            vbox_mid.getChildren().add(new Separator(Orientation.HORIZONTAL));
+        }
         vbox_mid.getChildren().add(root_Information);
         vbox_mid.getChildren().add(new Separator(Orientation.HORIZONTAL));
 
@@ -320,6 +329,25 @@ public class MainFormController implements Initializable {
                 lv_Queue.getSelectionModel().select(index - 1);
             }
         }
+    }
+
+    @FXML
+    private void mi_toggleTCP_onAction(ActionEvent event) throws IOException {
+
+        if (Storage.getSettings().isShowTCP()) {
+
+            Storage.getSettings().setShowTCP(false);
+            vbox_mid.getChildren().remove(vbox_mid.getChildren().size() - 3);
+            vbox_mid.getChildren().remove(vbox_mid.getChildren().size() - 3);
+
+        } else {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXMLContainer/Container_TCP.fxml"));
+            Parent root_TCP = loader.load();
+            vbox_mid.getChildren().add(vbox_mid.getChildren().size() - 2, root_TCP);
+            vbox_mid.getChildren().add(vbox_mid.getChildren().size() - 2, new Separator(Orientation.HORIZONTAL));
+            Storage.getSettings().setShowTCP(true);
+        }
+
     }
 
 }

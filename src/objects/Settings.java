@@ -46,6 +46,8 @@ public class Settings implements Serializable {
 
     int sliderState;
 
+    boolean showTCP = false;
+
     public Settings() {
         allowCPU = true;
         gpus = new ArrayList<>();
@@ -148,6 +150,14 @@ public class Settings implements Serializable {
 
     public void setRefreshMillis(int refreshMillis) {
         this.refreshMillis = refreshMillis;
+    }
+
+    public boolean isShowTCP() {
+        return showTCP;
+    }
+
+    public void setShowTCP(boolean showTCP) {
+        this.showTCP = showTCP;
     }
 
     /**

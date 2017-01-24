@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXMLContainer.Container_TCPController">
+   <children>
+      <Label text="Settings for a RenderFarm:">
+         <VBox.margin>
+            <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+         </VBox.margin>
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+         <children>
+            <VBox>
+               <children>
+                  <Label text="Port:">
+                     <VBox.margin>
+                        <Insets bottom="7.0" left="7.0" right="7.0" top="14.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="IP-Adress:">
+                     <VBox.margin>
+                        <Insets bottom="7.0" left="7.0" right="7.0" top="14.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox HBox.hgrow="ALWAYS">
+               <children>
+                  <TextField fx:id="tb_Port" onAction="#tb_Port_onAction" prefWidth="250.0">
+                     <VBox.margin>
+                        <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <TextField fx:id="tb_ipAdress" onAction="#tb_ipAdress_onAction">
+                     <VBox.margin>
+                        <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <Button fx:id="btn_toggle" mnemonicParsing="false" text="Start Server">
+                     <VBox.margin>
+                        <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+            <Separator orientation="VERTICAL" />
+            <VBox>
+               <children>
+                  <RadioButton fx:id="rb_Server" mnemonicParsing="false" onAction="#rb_onAction" selected="true" text="Server">
+                     <VBox.margin>
+                        <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+                     </VBox.margin>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="one" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="rb_Client" mnemonicParsing="false" onAction="#rb_onAction" text="Client" toggleGroup="$one" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+                     </VBox.margin>
+                  </RadioButton>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox>
+         <children>
+            <Label text="Status:">
+               <VBox.margin>
+                  <Insets bottom="7.0" left="7.0" right="7.0" top="50.0" />
+               </VBox.margin>
+               <HBox.margin>
+                  <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+               </HBox.margin>
+            </Label>
+            <Label fx:id="lbl_ServerStatus" text="OFF" wrapText="true">
+               <HBox.margin>
+                  <Insets bottom="7.0" left="30.0" right="7.0" top="7.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+   </children>
+</VBox>

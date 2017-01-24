@@ -32,6 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <items>
                         <MenuItem fx:id="mi_fullScreen" mnemonicParsing="false" onAction="#mi_fullScreen_onAction" text="Fullscreen" />
                   <MenuItem fx:id="mi_AddFile" mnemonicParsing="false" onAction="#mi_AddFile_onAction" text="Add Blender File(s)" />
+                  <MenuItem fx:id="mi_toggleTCP" mnemonicParsing="false" onAction="#mi_toggleTCP_onAction" text="Show/Hide TCP-Connection Tool" />
                         <MenuItem fx:id="mi_Close" mnemonicParsing="false" onAction="#mi_Close_onAction" text="Close" />
                     </items>
                 </Menu>
