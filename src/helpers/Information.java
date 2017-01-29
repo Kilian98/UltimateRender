@@ -17,8 +17,11 @@
 package helpers;
 
 import FXMLContainer.Container_InformationController;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import objects.BlenderFile;
+import server.Computer;
 import objects.RenderTask;
 import objects.RenderThread;
 
@@ -36,9 +39,13 @@ public class Information {
         Stopped
     }
 
-    static private boolean stopRendering;
+    static private boolean stopRendering = false;
     static private RenderThread[] threads;
     private static final Object synchronizer = new Object();
+    
+    static private boolean stopRenderfarm = false;
+    static private List<Computer> connectedComputers = new ArrayList<>();
+    static private Computer localComputer; //only for Clients
 
     //status information
     static int renderingThreads; //only tmp value
@@ -52,8 +59,6 @@ public class Information {
     static int framesRemaining;
 
     static long timeRendering;
-
-    static private int threadsRunning;
 
     /**
      * *

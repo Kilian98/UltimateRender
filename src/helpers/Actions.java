@@ -36,6 +36,8 @@ import objects.BlenderFile;
  */
 public class Actions {
 
+    private final static String numbers = "0123456789";
+
     /**
      * Asks if the program should be closed, but only when there are running
      * tasks in the background
@@ -153,22 +155,37 @@ public class Actions {
         }
 
     }
-    
+
     /**
      * checks, if a File is in the render queue already
+     *
      * @param f the path to the new File
      * @return true, if the file already exists
      */
-    public static boolean checkForExistingBlenderFile(File f){
-        
-        for (BlenderFile bf : Storage.getFilesToRender()){
-            if (bf.getPath().toString().equals(f.toString())){
+    public static boolean checkForExistingBlenderFile(File f) {
+
+        for (BlenderFile bf : Storage.getFilesToRender()) {
+            if (bf.getPath().toString().equals(f.toString())) {
                 return true;
             }
         }
-        
+
         return false;
-        
+
+    }
+
+    public static boolean isOnlyNumbers(String str) {
+
+        for (char s : str.toCharArray()) {
+
+            if (!numbers.contains(s + "")) {
+                return false;
+            }
+
+        }
+
+        return true;
+
     }
 
 }

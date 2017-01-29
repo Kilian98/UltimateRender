@@ -18,6 +18,7 @@ package FXMLContainer;
 
 import Exceptions.ReadBlenderException;
 import helpers.Actions;
+import static helpers.Actions.isOnlyNumbers;
 import static helpers.Actions.parseInt;
 import helpers.Constants;
 import java.io.File;
@@ -57,7 +58,6 @@ public class Container_blenderSettingsController implements Initializable {
 
     private BlenderFile blenderFile;
     boolean linked = false; //Last check if Container and BlenderFile are linked
-    private final String numbers = "0123456789";
     @FXML
     private Label lbl_Renderer;
 
@@ -136,20 +136,7 @@ public class Container_blenderSettingsController implements Initializable {
         this.blenderFile = blenderFile;
     }
 
-    private boolean isOnlyNumbers(String str) {
-
-        for (char s : str.toCharArray()) {
-
-            if (!numbers.contains(s + "")) {
-                return false;
-            }
-
-        }
-
-        return true;
-
-    }
-
+    
     private void cb_imageFormat_onChange(int oldValue, int newValue) {
 
         blenderFile.setFileFormat(Constants.IndexToImageFormat.get(newValue));

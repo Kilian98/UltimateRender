@@ -36,17 +36,17 @@
             </VBox>
             <VBox HBox.hgrow="ALWAYS">
                <children>
-                  <TextField fx:id="tb_Port" onAction="#tb_Port_onAction" prefWidth="250.0">
+                  <TextField fx:id="tb_Port" prefWidth="250.0">
                      <VBox.margin>
                         <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
                      </VBox.margin>
                   </TextField>
-                  <TextField fx:id="tb_ipAdress" onAction="#tb_ipAdress_onAction">
+                  <TextField fx:id="tb_ipAdress" disable="true">
                      <VBox.margin>
                         <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
                      </VBox.margin>
                   </TextField>
-                  <Button fx:id="btn_toggle" mnemonicParsing="false" text="Start Server">
+                  <Button fx:id="btn_toggle" mnemonicParsing="false" onAction="#btn_toggle_onAction" text="Start Server">
                      <VBox.margin>
                         <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
                      </VBox.margin>

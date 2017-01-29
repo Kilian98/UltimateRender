@@ -115,6 +115,7 @@ public class MainFormController implements Initializable {
         try {
             initContainer();
         } catch (IOException ex) {
+            System.out.println(ex.getMessage());
         }
 
     }
