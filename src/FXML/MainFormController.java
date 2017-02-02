@@ -20,6 +20,7 @@ import Exceptions.ParseException;
 import Exceptions.ReadBlenderException;
 import Exceptions.UnknownRendererException;
 import FXMLContainer.Container_InformationController;
+import FXMLContainer.Container_TCPController;
 import FXMLContainer.Container_blenderSettingsController;
 import Graphic_board.Graphicboard;
 import helpers.Actions;
@@ -224,6 +225,8 @@ public class MainFormController implements Initializable {
 
         loader = new FXMLLoader(getClass().getResource("/FXMLContainer/Container_TCP.fxml"));
         Parent root_TCP = loader.load();
+        Container_TCPController tcpController = (Container_TCPController) loader.getController();
+        Information.setTCPController(tcpController);
 
         vbox_mid.getChildren().add(new Separator(Orientation.HORIZONTAL));
         vbox_mid.getChildren().add(root_generalSettings);

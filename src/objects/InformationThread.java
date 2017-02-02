@@ -17,6 +17,7 @@
 package objects;
 
 import FXMLContainer.Container_InformationController;
+import FXMLContainer.Container_TCPController;
 import helpers.Information;
 import helpers.Storage;
 import javafx.application.Platform;
@@ -31,6 +32,7 @@ public class InformationThread extends Thread {
     public void run() {
 
         Container_InformationController controller = Information.getInfoController();
+        Container_TCPController controllerServer = Information.getTCPController();
 
         while (true) {
 
@@ -54,6 +56,9 @@ public class InformationThread extends Thread {
                 controller.getLbl_pcsConnected().setText("Computers connected: " + Information.getComputersConnected());
                 controller.getLbl_extRenderingThreads().setText("External rendering threads: " + Information.getExtRenderingThreads());
                 controller.getLbl_ConnectionThreads().setText("External Rendering Threads: " + Information.getServerThreads());
+
+                controllerServer.getLbl_ServerStatus().setText(Information.getServerState());
+
             });
 
         }

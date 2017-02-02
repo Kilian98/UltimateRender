@@ -26,6 +26,7 @@ public class Paths {
 
     private static String SettingsPath = "UltimateRender\\settings.ul";
     private static String QueuePath = "UltimateRender\\queue.ul";
+    private static String workingDir = "UltimateRender\\tmp";
 
     public static String getSettingsPath() {
         return SettingsPath.replace("\\", File.separator); //todo: check for running os
@@ -34,4 +35,17 @@ public class Paths {
     public static String getQueuePath() {
         return QueuePath.replace("\\", File.separator); //todo: check for running os
     }
+
+    public static String getWorkingDir() {
+
+        String tmp = workingDir.replace("\\", File.separator);
+        File f = new File(tmp);
+
+        if (!f.exists()) {
+            f.mkdirs();
+        }
+
+        return tmp;
+    }
+
 }

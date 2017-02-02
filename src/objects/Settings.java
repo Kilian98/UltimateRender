@@ -33,6 +33,7 @@ import javafx.stage.Window;
  */
 public class Settings implements Serializable {
 
+    private long blenderFileId;
     private int maxInstancesPerDevice;
 
     private File pathToBlenderExe;
@@ -93,6 +94,11 @@ public class Settings implements Serializable {
             }
         }
 
+    }
+    
+    public long getNextBlenderFileId(){
+        blenderFileId++;
+        return blenderFileId;
     }
 
     //<editor-fold defaultstate="collapsed" desc="getters and setters">

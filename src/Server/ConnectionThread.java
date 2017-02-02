@@ -14,13 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package server;
+package Server;
 
 import Exceptions.NetworkException;
+import helpers.Actions;
+import static helpers.Actions.closeStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,8 +32,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -44,10 +43,14 @@ public abstract class ConnectionThread extends Thread {
     public InputStream sIn;
     public OutputStream sOut;
 
-    public ConnectionThread() {
+    String ipAddress = "";
+    int port = 0;
 
+    public ConnectionThread(String ip, int port) {
+        this.ipAddress = ip;
+        this.port = port;
     }
-
+    
     public ConnectionThread(Socket s) throws NetworkException {
 
         try {
@@ -60,7 +63,12 @@ public abstract class ConnectionThread extends Thread {
 
     }
 
-    public void establishClientConnction(String ipAddress, int port, String messageToServer) throws NetworkException {
+    public void close(){
+        Computer.removeSocket(socket);
+        Actions.closeStream(socket);
+    }
+    
+    public void establishClientConnction(String messageToServer) throws NetworkException {
 
         try {
             socket = new Socket(ipAddress, port);
@@ -73,8 +81,31 @@ public abstract class ConnectionThread extends Thread {
             throw new NetworkException();
         }
 
+        Computer.addSocketToList(socket);
+        System.out.println("Established Connection");
+
     }
 
+    @Deprecated
+    public void establishServerConnection() throws NetworkException {
+
+        if (!ipAddress.equals("")){
+            throw new NetworkException(); //if the ip is set, it is a Client and shall open up a Server
+        }
+        
+        try {
+            ServerSocket sSocket = new ServerSocket(port);
+            socket = sSocket.accept();
+
+            sIn = socket.getInputStream();
+            sOut = socket.getOutputStream();
+
+        } catch (IOException ex) {
+            throw new NetworkException();
+        }
+
+    }
+    
     public void sendLine(String line) {
 
         PrintWriter out = new PrintWriter(sOut, true);
@@ -118,49 +149,40 @@ public abstract class ConnectionThread extends Thread {
         try {
             byte[] buffer = new byte[4096];
             InputStream inputStream = new FileInputStream(f);
-            OutputStream outputStream = sOut;
             int len = 0;
 
             while ((len = inputStream.read(buffer)) > 0) {
-                outputStream.write(buffer, 0, len);
+                sOut.write(buffer, 0, len);
             }
 
         } catch (IOException ex) {
             throw new NetworkException();
+        } finally {
+            closeStream(sOut);
         }
     }
 
+    
+
     public void readFile(File outputFile) throws NetworkException {
-        
+
         try {
-        
+
             OutputStream outputStream = new FileOutputStream(outputFile);
             InputStream inputStream = socket.getInputStream();
             byte[] buffer = new byte[4096];
             int len = 0;
-            
+
             while ((len = inputStream.read(buffer)) > 0) {
                 outputStream.write(buffer, 0, len);
             }
-            
-        } catch (IOException ex) {
-            throw new NetworkException();
-        }
-    }
 
-    public void establishServerConnection(int port) throws NetworkException {
-
-        try {
-            ServerSocket sSocket = new ServerSocket(port);
-            socket = sSocket.accept();
-
-            sIn = socket.getInputStream();
-            sOut = socket.getOutputStream();
 
         } catch (IOException ex) {
             throw new NetworkException();
+        } finally {
+            closeStream(socket);
         }
-
     }
 
     @Override

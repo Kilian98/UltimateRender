@@ -69,6 +69,11 @@
                         <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
                      </VBox.margin>
                   </RadioButton>
+                  <Button fx:id="btn_Test" mnemonicParsing="false" onAction="#btn_Test_onAction" text="BIG TEST">
+                     <VBox.margin>
+                        <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+                     </VBox.margin>
+                  </Button>
                </children>
             </VBox>
          </children>

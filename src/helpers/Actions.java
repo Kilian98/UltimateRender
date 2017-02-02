@@ -18,11 +18,13 @@ package helpers;
 
 import Exceptions.ReadBlenderException;
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Optional;
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
@@ -37,6 +39,7 @@ import objects.BlenderFile;
 public class Actions {
 
     private final static String numbers = "0123456789";
+    private static int blenderFileId = 0;
 
     /**
      * Asks if the program should be closed, but only when there are running
@@ -45,6 +48,11 @@ public class Actions {
      * @param event window event to consume the try of closing
      */
     public static void saveClose(WindowEvent event) {
+
+        File f = new File(Paths.getWorkingDir());
+        if (f.exists()) {
+            FileHelpers.deleteDir(f);
+        }
 
         if (Information.threadsRunning()) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -70,27 +78,51 @@ public class Actions {
 
     }
 
-    public static void showError(String message, Exception ex) {
+    public static void closeStream(Closeable s) {
 
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(ex.getClass().toString());
-        alert.setHeaderText(ex.getMessage());
-        alert.getDialogPane().setContent(new Label(message));
+        if (s == null) {
+            return;
+        }
+
+        try {
+            s.close();
+        } catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+    }
+
+    public static void showError(String message, Exception ex) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle(ex.getClass().toString());
+                alert.setHeaderText(ex.getMessage());
+                alert.getDialogPane().setContent(new Label(message));
 //        alert.setContentText(ex.getMessage());
 
-        alert.showAndWait();
+                alert.showAndWait();
+            }
+        });
 
     }
 
     public static void showAlert(String title, String header, String content) {
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.getDialogPane().setContent(new Label(content));
-//        alert.setContentText(ex.getMessage());
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
 
-        alert.showAndWait();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(title);
+                alert.setHeaderText(header);
+                alert.getDialogPane().setContent(new Label(content));
+                //alert.setContentText(ex.getMessage());
+
+                alert.showAndWait();
+
+            }
+        });
 
     }
 
@@ -186,6 +218,11 @@ public class Actions {
 
         return true;
 
+    }
+
+    public static int getNextBlenderFileID() {
+        blenderFileId++;
+        return blenderFileId;
     }
 
 }

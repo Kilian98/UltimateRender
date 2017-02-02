@@ -46,12 +46,12 @@ public class FileHelpers {
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), StandardCharsets.UTF_8));
 
             String[] lines = content.split("\n");
-            
-            for (String s : lines){
+
+            for (String s : lines) {
                 writer.write(s);
                 writer.newLine();
             }
-                    
+
             writer.flush();
 
         } catch (IOException e) {
@@ -70,6 +70,20 @@ public class FileHelpers {
             } catch (IOException ex) {
             }
         }
+    }
+
+    static void deleteDir(File f) {
+
+        for (File tmp : f.listFiles()) {
+            if (tmp.isDirectory()) {
+                deleteDir(tmp);
+            } else {
+                tmp.delete();
+            }
+        }
+
+        f.delete();
+
     }
 
 }

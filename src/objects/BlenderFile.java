@@ -58,6 +58,8 @@ public class BlenderFile implements Serializable {
     final private int startFrame_orig;
     final private int endFrame_orig;
 
+    final private long id;
+
     /**
      * Creates a new BlenderFile. The required Information will be read out of
      * the blender document
@@ -74,6 +76,8 @@ public class BlenderFile implements Serializable {
      * @throws Exceptions.ReadBlenderException
      */
     public BlenderFile(File blenderFile, Window window) throws IOException, InterruptedException, UnknownRendererException, ParseException, ReadBlenderException {
+
+        id = Actions.getNextBlenderFileID();
         path = blenderFile;
 
         HashMap<Integer, String> map = Actions.getInformationsFromBlenderFile(blenderFile, ""
@@ -137,11 +141,11 @@ public class BlenderFile implements Serializable {
             tmp = currentDir.toString() + File.separator + lastPath.substring(0, lastPath.length() - 1);
 
         }
-        
-        if (tmp.endsWith(File.separator)){
+
+        if (tmp.endsWith(File.separator)) {
             tmp += path.getName().split("\\.")[0];
         }
-        
+
         pathToRender = new File(tmp);
         pathToRender_orig = new File(tmp);
 
@@ -231,6 +235,10 @@ public class BlenderFile implements Serializable {
 
     public void setMaxThreads(int maxThreads) {
         this.maxThreads = maxThreads;
+    }
+
+    public long getId() {
+        return id;
     }
 
 //</editor-fold>

@@ -17,11 +17,14 @@
 package helpers;
 
 import FXMLContainer.Container_InformationController;
+import FXMLContainer.Container_TCPController;
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import objects.BlenderFile;
-import server.Computer;
+import Server.Computer;
 import objects.RenderTask;
 import objects.RenderThread;
 
@@ -42,10 +45,17 @@ public class Information {
     static private boolean stopRendering = false;
     static private RenderThread[] threads;
     private static final Object synchronizer = new Object();
-    
-    static private boolean stopRenderfarm = false;
+
+    //variables for the Renderfarm
+    static private boolean stopServer = false;
+    static private boolean stopClient = false;
     static private List<Computer> connectedComputers = new ArrayList<>();
-    static private Computer localComputer; //only for Clients
+    static private Computer localComputer = null; //only for servers and clients
+    static private boolean Client = false;
+    static private ServerSocket sSocket = null; //for stoping the server, close the server socket
+    static private int computerID = 0;
+    static private Container_TCPController TCPController;
+    static private String serverState = "OFF";
 
     //status information
     static int renderingThreads; //only tmp value
@@ -110,8 +120,6 @@ public class Information {
             } catch (InterruptedException ex) {
             }
         }
-        
-        
 
     }
 
@@ -134,6 +142,22 @@ public class Information {
 
         Information.setFramesRemaining(Storage.getQueue().getTasks().size() + renderingThreads + extRenderingThreads);
 
+    }
+
+    public static void stopServer() {
+        try {
+            stopServer = true;
+            sSocket.close();
+        } catch (IOException ex) {
+        }
+    }
+
+    public static void stopClient() {
+        stopClient = true;
+        setClient(false);
+        if (localComputer != null) {
+            localComputer.close();
+        }
     }
 
     //<editor-fold defaultstate="collapsed" desc="Getters and Setters">
@@ -210,11 +234,7 @@ public class Information {
     }
 
     public static int getComputersConnected() {
-        return computersConnected;
-    }
-
-    public static void setComputersConnected(int computersConnected) {
-        Information.computersConnected = computersConnected;
+        return connectedComputers.size();
     }
 
     public static int getExtRenderingThreads() {
@@ -231,10 +251,82 @@ public class Information {
             Storage.getQueue().setFramesRendered(framesRendered);
         }
     }
-    
-    public static void clearFramesRendered(){
+
+    public static void clearFramesRendered() {
         framesRendered = 0;
         Storage.getQueue().setFramesRendered(0);
+    }
+
+    public static Computer getLocalComputer() {
+        return localComputer;
+    }
+
+    public static void setLocalComputer(Computer localComputer) {
+        Information.localComputer = localComputer;
+    }
+
+    public static boolean isClient() {
+        return Client;
+    }
+
+    public static void setClient(boolean Client) {
+        Information.Client = Client;
+    }
+
+    public static boolean isStopServer() {
+        return stopServer;
+    }
+
+    public static void setStopServer(boolean stopServer) {
+        Information.stopServer = stopServer;
+    }
+
+    public static boolean isStopClient() {
+        return stopClient;
+    }
+
+    public static void setStopClient(boolean stopClient) {
+        Information.stopClient = stopClient;
+    }
+
+    public static ServerSocket getsSocket() {
+        return sSocket;
+    }
+
+    public static void setsSocket(ServerSocket sSocket) {
+        Information.sSocket = sSocket;
+    }
+
+    public static int getNextComputerId() {
+        return computerID++;
+    }
+
+    public static void addComputerToList(Computer c) {
+        synchronized (synchronizer) {
+            connectedComputers.add(c);
+        }
+    }
+
+    public static void removeComputerFromList(Computer c) {
+        synchronized (synchronizer) {
+            connectedComputers.remove(c);
+        }
+    }
+
+    public static Container_TCPController getTCPController() {
+        return TCPController;
+    }
+
+    public static void setTCPController(Container_TCPController tcpController) {
+        Information.TCPController = tcpController;
+    }
+
+    public static String getServerState() {
+        return serverState;
+    }
+
+    public static void setServerState(String serverState) {
+        Information.serverState = serverState;
     }
 
     /**

@@ -32,6 +32,14 @@ public class Constants {
     final public static String blenderPathPytonString = "bpy.data.scenes[\"Scene\"].render.filepath";
     final public static HashMap<String, Integer> ImageFormatToIndex = new HashMap<>();
     final public static HashMap<Integer, String> IndexToImageFormat = new HashMap<>();
+    
+    //Connection Constants
+    final public static String requestBlenderFiles = "reqBl";
+    final public static String requestNewJob = "reqNewJ";
+    final public static String requestComputer = "cpRend";
+    final public static String sendInformation = "sendInfo";
+    final public static String checkForConnection = "chckCon";
+    final public static String copyRenderedFile = "cpRend";
 
     public static void initConstants() {
         ImageFormatToIndex.put("PNG", 0);
