@@ -25,7 +25,6 @@ import helpers.Information;
 import helpers.Storage;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import javafx.stage.Window;
 
@@ -123,7 +122,10 @@ public class RenderThread extends Thread {
 
             String pythonContent = "";
 
-            if (board != null) {
+            if (board == null) {
+                pythonContent = "import bpy\n"
+                        + "bpy.context.scene.cycles.device = \"CPU\"";
+            } else {
                 pythonContent = "import bpy\n"
                         + "bpy.context.user_preferences.system.compute_device_type = \"" + board.getType() + "\"\n"
                         + "bpy.context.scene.cycles.device = \"GPU\"\n"
