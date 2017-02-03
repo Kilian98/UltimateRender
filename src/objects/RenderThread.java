@@ -17,6 +17,9 @@
 package objects;
 
 import Graphic_board.Graphicboard;
+import Server.Computer;
+import Server.CopyBlenderFileThread;
+import Server.CopyRenderTask;
 import helpers.FileHelpers;
 import helpers.Information;
 import helpers.Storage;
@@ -59,7 +62,6 @@ public class RenderThread extends Thread {
     @Override
     public void run() {
 
-
         while (!Information.isStopRendering()) {
 
             if (board == null) {
@@ -88,11 +90,22 @@ public class RenderThread extends Thread {
 
             RenderTask task;
 
-            synchronized (Information.getSynchronizer()) {
-                if (!Storage.getRenderTasks().isEmpty()) {
-                    task = Storage.getRenderTasks().removeFirst(); //todo: check if isSlave and gather value
-                } else {
-                    break;
+            if (Information.isClient()) {
+
+                task = new CopyRenderTask(Information.getLocalComputer().getIpAddress(), Information.getLocalComputer().getPort()).getRenderTask();
+                Computer.addTaskToRender(task);
+                if (!new File(BlenderFile.getFilenameById(task.getFile().getId())).exists()) {
+                    new CopyBlenderFileThread(Information.getLocalComputer().getIpAddress(), Information.getLocalComputer().getPort(),
+                            task.getFile().getId()).runWithoutThread();
+                }
+
+            } else {
+                synchronized (Information.getSynchronizer()) {
+                    if (!Storage.getRenderTasks().isEmpty()) {
+                        task = Storage.getRenderTasks().removeFirst(); //todo: check if isSlave and gather value
+                    } else {
+                        break;
+                    }
                 }
             }
 
@@ -156,7 +169,6 @@ public class RenderThread extends Thread {
                 System.out.println("rendered task: " + task);
                 Information.increaseFramesRendered(1);
 
-            } catch (IOException ex) {
             } catch (Exception ex) {
                 synchronized (Information.getSynchronizer()) {
                     Storage.getRenderTasks().addFirst(task);
@@ -164,6 +176,10 @@ public class RenderThread extends Thread {
             } finally {
                 pythonFile.delete();
             }
+
+            //todo: send back Rendered Image
+            //if succesfull:
+            Computer.removeTaskToRender(task);
 
         }
 

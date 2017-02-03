@@ -21,7 +21,6 @@ import helpers.Constants;
 import helpers.Information;
 import java.net.Socket;
 import Server.Computer.ComputerType;
-import helpers.Actions;
 
 /**
  *
@@ -82,6 +81,8 @@ public class CheckConnection extends ConnectionThread {
         } catch (NetworkException e) {
             System.err.println("Error or Shutdown!");
             Information.setServerState("Shutdown");
+        }finally{
+            close();
         }
 
     }

@@ -60,9 +60,14 @@ public class ServerListenerThread extends ConnectionThread {
 
                 switch (readLine()) {
                     case Constants.requestBlenderFiles:
-                        copyBlenderFiles(socket);
+                        copyBlenderFiles();
+                        break;
                     case Constants.checkForConnection:
-                        checkForConnection(socket);
+                        checkForConnection();
+                        break;
+                    case Constants.requestNewJob:
+                        copyNewJob();
+                        break;
                 }
 
             } catch (SocketException e) {
@@ -89,22 +94,29 @@ public class ServerListenerThread extends ConnectionThread {
         }
     }
 
-    private void copyBlenderFiles(Socket tmpSocket) {
+    private void copyBlenderFiles() {
 
         try {
-            new CopyBlenderFileThread(tmpSocket).start();
+            new CopyBlenderFileThread(socket).start();
         } catch (NetworkException ex) {
         }
 
     }
 
-    private void checkForConnection(Socket tmpSocket) {
+    private void checkForConnection() {
 
         try {
-            new CheckConnection(tmpSocket).start();
+            new CheckConnection(socket).start();
         } catch (NetworkException ex) {
         }
 
+    }
+
+    private void copyNewJob() {
+        try {
+            new CopyRenderTask(socket).start();
+        } catch (NetworkException e) {
+        }
     }
 
 }

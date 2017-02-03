@@ -145,11 +145,8 @@ public class Information {
     }
 
     public static void stopServer() {
-        try {
-            stopServer = true;
-            sSocket.close();
-        } catch (IOException ex) {
-        }
+        stopServer = true;
+        Actions.closeStream(sSocket);
     }
 
     public static void stopClient() {

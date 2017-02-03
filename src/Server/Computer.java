@@ -21,7 +21,7 @@ import helpers.Information;
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.LinkedList;
-import objects.BlenderFile;
+import objects.RenderTask;
 
 /**
  *
@@ -31,7 +31,8 @@ public class Computer implements Serializable {
 
     private final ComputerType type;
     private final int id;
-    private final LinkedList<BlenderFile> filesToRenderLocal = new LinkedList<>();
+    private LinkedList<RenderTask> tasksToRenderLocal = new LinkedList<>();
+    
     private Socket socket;
     private int port;
     private String ipAddress = "";
@@ -70,13 +71,10 @@ public class Computer implements Serializable {
         this.type = type;
     }
 
-    public LinkedList<BlenderFile> getFilesToRenderLocal() {
-        return filesToRenderLocal;
+    public LinkedList<RenderTask> getAllTasks() {
+        return tasksToRenderLocal;
     }
 
-    public void addFilesToRenderLocal(BlenderFile file) {
-        filesToRenderLocal.add(file);
-    }
 
     public int getId() {
         return id;
@@ -93,6 +91,8 @@ public class Computer implements Serializable {
     public LinkedList<Socket> getAllSockets() {
         return allSockets;
     }
+    
+    
 
     public static void addSocketToList(Socket s) {
         synchronized (synchronizer) {
@@ -108,6 +108,22 @@ public class Computer implements Serializable {
                 Information.getLocalComputer().getAllSockets().remove(s);
             }
         }
+    }
+    
+    public static void addTaskToRender(RenderTask task){
+         synchronized (synchronizer) {
+             if (Information.getLocalComputer() != null){
+                 Information.getLocalComputer().getAllTasks().addLast(task);
+             }
+         }
+    }
+    
+    public static void removeTaskToRender(RenderTask task){
+         synchronized (synchronizer) {
+             if (Information.getLocalComputer() != null){
+                 Information.getLocalComputer().getAllTasks().remove(task);
+             }
+         }
     }
 
 }

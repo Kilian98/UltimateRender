@@ -50,7 +50,7 @@ public abstract class ConnectionThread extends Thread {
         this.ipAddress = ip;
         this.port = port;
     }
-    
+
     public ConnectionThread(Socket s) throws NetworkException {
 
         try {
@@ -63,11 +63,13 @@ public abstract class ConnectionThread extends Thread {
 
     }
 
-    public void close(){
-        Computer.removeSocket(socket);
+    public void close() {
+        if (!(this instanceof CheckConnection)) {
+            Computer.removeSocket(socket);
+        }
         Actions.closeStream(socket);
     }
-    
+
     public void establishClientConnction(String messageToServer) throws NetworkException {
 
         try {
@@ -81,7 +83,10 @@ public abstract class ConnectionThread extends Thread {
             throw new NetworkException();
         }
 
-        Computer.addSocketToList(socket);
+        if (!(this instanceof CheckConnection)) {
+            Computer.addSocketToList(socket);
+        }
+
         System.out.println("Established Connection");
 
     }
@@ -89,10 +94,10 @@ public abstract class ConnectionThread extends Thread {
     @Deprecated
     public void establishServerConnection() throws NetworkException {
 
-        if (!ipAddress.equals("")){
+        if (!ipAddress.equals("")) {
             throw new NetworkException(); //if the ip is set, it is a Client and shall open up a Server
         }
-        
+
         try {
             ServerSocket sSocket = new ServerSocket(port);
             socket = sSocket.accept();
@@ -105,7 +110,7 @@ public abstract class ConnectionThread extends Thread {
         }
 
     }
-    
+
     public void sendLine(String line) {
 
         PrintWriter out = new PrintWriter(sOut, true);
@@ -162,8 +167,6 @@ public abstract class ConnectionThread extends Thread {
         }
     }
 
-    
-
     public void readFile(File outputFile) throws NetworkException {
 
         try {
@@ -176,7 +179,6 @@ public abstract class ConnectionThread extends Thread {
             while ((len = inputStream.read(buffer)) > 0) {
                 outputStream.write(buffer, 0, len);
             }
-
 
         } catch (IOException ex) {
             throw new NetworkException();

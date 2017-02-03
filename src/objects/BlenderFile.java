@@ -23,6 +23,7 @@ import helpers.Actions;
 import static helpers.Actions.parseInt;
 import helpers.Constants;
 import static helpers.Information.getMaxCpuCernels;
+import helpers.Paths;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -242,4 +243,8 @@ public class BlenderFile implements Serializable {
     }
 
 //</editor-fold>
+    
+    public static String getFilenameById(long id){
+        return Paths.getWorkingDir() + File.separator + id + ".blend";
+    }
 }

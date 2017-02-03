@@ -18,8 +18,6 @@ package Server;
 
 import Exceptions.NetworkException;
 import helpers.Constants;
-import helpers.Information;
-import helpers.Paths;
 import helpers.Storage;
 import java.io.File;
 import java.net.Socket;
@@ -44,6 +42,10 @@ public class CopyBlenderFileThread extends ConnectionThread {
         super(s);
     }
 
+    public void runWithoutThread(){
+        run();
+    }
+    
     @Override
     public void run() {
 
@@ -54,10 +56,9 @@ public class CopyBlenderFileThread extends ConnectionThread {
                 establishClientConnction(Constants.requestBlenderFiles); //sends a line as well
                 sendLine(blenderFileId + "");
 
-                BlenderFile file = (BlenderFile) readObject();
-                Information.getLocalComputer().addFilesToRenderLocal(file);
-
-                File destination = new File(Paths.getWorkingDir() + File.separator + file.getId() + ".blend"); //todo
+//                BlenderFile file = (BlenderFile) readObject();
+//                Information.getLocalComputer().addFilesToRenderLocal(file);
+                File destination = new File(BlenderFile.getFilenameById(blenderFileId));
                 readFile(destination);
 
                 System.out.println("Transferred File: " + destination.toString() + " from Server");
@@ -85,7 +86,7 @@ public class CopyBlenderFileThread extends ConnectionThread {
                     }
                 }
 
-                sendObject(blenderFile);
+//                sendObject(blenderFile);
                 sendFile(fileToTransfer);
                 System.out.println("Transfered File: " + fileToTransfer.toString() + " to Client");
             } catch (NetworkException ex) {
@@ -93,6 +94,8 @@ public class CopyBlenderFileThread extends ConnectionThread {
 
         }
 
+        close();
+        
     }
 
 }

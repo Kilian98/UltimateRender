@@ -100,17 +100,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                                 <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
                                              </VBox.margin>
                                           </Label>
-                                          <Button fx:id="btn_netStart" mnemonicParsing="false" onAction="#btn_netStart_onAction" text="Start">
+                                          <Button fx:id="btn_netStart" disable="true" mnemonicParsing="false" onAction="#btn_netStart_onAction" text="Start">
                                              <VBox.margin>
                                                 <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
                                              </VBox.margin>
                                           </Button>
-                                                        <Button fx:id="btn_netPause" mnemonicParsing="false" onAction="#btn_netPause_onAction" text="Exit after Frame">
+                                                        <Button fx:id="btn_netPause" disable="true" mnemonicParsing="false" onAction="#btn_netPause_onAction" text="Exit after Frame">
                                                             <VBox.margin>
                                                                 <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
                                                             </VBox.margin>
                                                         </Button>
-                                                        <Button fx:id="btn_netAbort" mnemonicParsing="false" onAction="#btn_netAbort_onAction" text="Abort">
+                                                        <Button fx:id="btn_netAbort" disable="true" mnemonicParsing="false" onAction="#btn_netAbort_onAction" text="Abort">
                                                             <VBox.margin>
                                                                 <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
                                                             </VBox.margin>
