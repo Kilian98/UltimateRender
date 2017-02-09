@@ -31,8 +31,8 @@ public class Computer implements Serializable {
 
     private final ComputerType type;
     private final int id;
-    private LinkedList<RenderTask> tasksToRenderLocal = new LinkedList<>();
-    
+    private final LinkedList<RenderTask> tasksToRenderLocal = new LinkedList<>(); //will be sent back when rendering is not succesfull
+
     private Socket socket;
     private int port;
     private String ipAddress = "";
@@ -40,8 +40,11 @@ public class Computer implements Serializable {
 
     private static final Object synchronizer = new Object();
 
+    private int renderingThreads;   //only for the server
+    private int framesRendered;     //for server and client
+
     public void close() {
-        for (Socket s : allSockets){
+        for (Socket s : allSockets) {
             closeStream(s);
         }
         closeStream(socket);
@@ -49,7 +52,7 @@ public class Computer implements Serializable {
 
     /**
      * Gives the connection-check socket to the computer. IP-Address and Port
-     * will set to 'Computer' automatically.
+     * will be set to 'Computer' automatically.
      *
      * @param s The socket to overgive
      */
@@ -71,10 +74,13 @@ public class Computer implements Serializable {
         this.type = type;
     }
 
+    public void setIPAddress(String address) {
+        this.ipAddress = address;
+    }
+
     public LinkedList<RenderTask> getAllTasks() {
         return tasksToRenderLocal;
     }
-
 
     public int getId() {
         return id;
@@ -91,8 +97,22 @@ public class Computer implements Serializable {
     public LinkedList<Socket> getAllSockets() {
         return allSockets;
     }
-    
-    
+
+    public int getRenderingThreads() {
+        return renderingThreads;
+    }
+
+    public void setRenderingThreads(int renderingThreads) {
+        this.renderingThreads = renderingThreads;
+    }
+
+    public int getFramesRendered() {
+        return framesRendered;
+    }
+
+    public void setFramesRendered(int framesRendered) {
+        this.framesRendered = framesRendered;
+    }
 
     public static void addSocketToList(Socket s) {
         synchronized (synchronizer) {
@@ -109,21 +129,21 @@ public class Computer implements Serializable {
             }
         }
     }
-    
-    public static void addTaskToRender(RenderTask task){
-         synchronized (synchronizer) {
-             if (Information.getLocalComputer() != null){
-                 Information.getLocalComputer().getAllTasks().addLast(task);
-             }
-         }
+
+    public static void addTaskToRender(RenderTask task) {
+        synchronized (synchronizer) {
+            if (Information.getLocalComputer() != null) {
+                Information.getLocalComputer().getAllTasks().addLast(task);
+            }
+        }
     }
-    
-    public static void removeTaskToRender(RenderTask task){
-         synchronized (synchronizer) {
-             if (Information.getLocalComputer() != null){
-                 Information.getLocalComputer().getAllTasks().remove(task);
-             }
-         }
+
+    public static void removeTaskToRender(RenderTask task) {
+        synchronized (synchronizer) {
+            if (Information.getLocalComputer() != null) {
+                Information.getLocalComputer().getAllTasks().remove(task);
+            }
+        }
     }
 
 }

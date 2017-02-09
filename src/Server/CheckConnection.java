@@ -21,6 +21,7 @@ import helpers.Constants;
 import helpers.Information;
 import java.net.Socket;
 import Server.Computer.ComputerType;
+import java.net.ServerSocket;
 
 /**
  *
@@ -33,8 +34,8 @@ public class CheckConnection extends ConnectionThread {
     public CheckConnection(Socket s) throws NetworkException {
         super(s);
     }
-    
-    public CheckConnection(String ipAddress, int port){
+
+    public CheckConnection(String ipAddress, int port) {
         super(ipAddress, port);
     }
 
@@ -50,10 +51,9 @@ public class CheckConnection extends ConnectionThread {
             if (!ipAddress.equals("")) {     //Part foir Client Connection
 
                 establishClientConnction(Constants.checkForConnection);
-                Information.setLocalComputer((Computer) readObject());
-                
-                Information.getLocalComputer().setSocket(socket);
 
+                Information.setLocalComputer((Computer) readObject());
+                Information.getLocalComputer().setSocket(socket);
 
                 connected = true;
                 Information.setServerState("Connected");
@@ -63,17 +63,18 @@ public class CheckConnection extends ConnectionThread {
                     Information.setServerState("Server Connection Lost");
                 }
 
-            } else {
+            } else { //Server part
 
                 Computer pc = new Computer(ComputerType.client);
                 sendObject(pc);
+                pc.setIPAddress(socket.getRemoteSocketAddress().toString().split(":")[0].substring(1));
                 Information.addComputerToList(pc);
 
                 if (readLine() == null) {
-                    System.err.println("The connection shut down (Error)");
+                    System.err.println("The connection shut down");
 //                    Actions.showAlert("Connection Lost", "A Client has disconnected", "Disconnection");
                 }
-                
+
                 Information.removeComputerFromList(pc);
 
             }
@@ -81,7 +82,7 @@ public class CheckConnection extends ConnectionThread {
         } catch (NetworkException e) {
             System.err.println("Error or Shutdown!");
             Information.setServerState("Shutdown");
-        }finally{
+        } finally {
             close();
         }
 

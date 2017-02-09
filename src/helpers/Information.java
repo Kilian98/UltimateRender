@@ -16,15 +16,18 @@
  */
 package helpers;
 
+import Exceptions.NetworkException;
 import FXMLContainer.Container_InformationController;
 import FXMLContainer.Container_TCPController;
-import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import objects.BlenderFile;
 import Server.Computer;
+import Server.CopyInformation;
+import objects.InformationPackage;
+import objects.InformationThread;
 import objects.RenderTask;
 import objects.RenderThread;
 
@@ -35,6 +38,7 @@ import objects.RenderThread;
 public class Information {
 
     static private Container_InformationController infoController;
+    private static InformationThread infoThread;
 
     public enum Status {
         Rendering,
@@ -56,6 +60,7 @@ public class Information {
     static private int computerID = 0;
     static private Container_TCPController TCPController;
     static private String serverState = "OFF";
+    private static final List<Long> blenderFilesTransfered = new ArrayList<>();
 
     //status information
     static int renderingThreads; //only tmp value
@@ -121,26 +126,64 @@ public class Information {
             }
         }
 
+        System.out.println("stopped all threads");
+
     }
 
     public static void updateInformation() {
 
         renderingThreads = 0;
         waitingThreads = 0;
+        framesRemaining = Storage.getRenderTasks().size();
 
         if (!threadsRunning()) {
             status = Status.Stopped;
         } else {
             for (RenderThread t : threads) {
-                if (t.getThreadState() == RenderThread.ThreadState.renderingCPU || t.getThreadState() == RenderThread.ThreadState.renderingGPU) {
+                if ((t.getThreadState() == RenderThread.ThreadState.renderingCPU || t.getThreadState() == RenderThread.ThreadState.renderingGPU) && t.isAlive()) {
                     renderingThreads++;
-                } else {
+                } else if (t.isAlive()) {
                     waitingThreads++;
                 }
             }
         }
 
-        Information.setFramesRemaining(Storage.getQueue().getTasks().size() + renderingThreads + extRenderingThreads);
+        if (isClient()) {
+            try {
+                InformationPackage infoPack = new InformationPackage(getFramesRendered(), getRenderingThreads(), computerID);
+                CopyInformation cpInfo;
+
+                while (true) {
+                    cpInfo = new CopyInformation(localComputer.getIpAddress(), localComputer.getPort(), infoPack);
+                    if (cpInfo != null) {
+                        break;
+                    }
+                }
+
+                cpInfo.start();
+                infoPack = cpInfo.getInfoPackage();
+
+                localComputer.setFramesRendered(infoPack.renderedFrames);
+                localComputer.setRenderingThreads(infoPack.renderingThreads);
+                Information.setComputersConnected(infoPack.computersConnected);
+                Information.setFramesRemaining(infoPack.remainingFrames);
+            } catch (NetworkException e) {
+                System.out.println("catched error, continuing");
+            }
+
+        }
+
+    }
+
+    public static int getAllRenderedFrames() {
+
+        int frames = framesRendered;
+
+        for (Computer c : connectedComputers) {
+            frames += c.getFramesRendered();
+        }
+
+        return frames;
 
     }
 
@@ -231,11 +274,27 @@ public class Information {
     }
 
     public static int getComputersConnected() {
-        return connectedComputers.size();
+        if (!isClient()) {
+            return connectedComputers.size();
+        } else {
+            return computersConnected;
+        }
+    }
+
+    public static void setComputersConnected(int computer) {
+        computersConnected = computer;
     }
 
     public static int getExtRenderingThreads() {
-        return extRenderingThreads;
+        if (!isClient()) {
+            int t = 0;
+            for (Computer c : connectedComputers) {
+                t += c.getRenderingThreads();
+            }
+            return t;
+        } else {
+            return extRenderingThreads;
+        }
     }
 
     public static void setExtRenderingThreads(int extRenderingThreads) {
@@ -298,6 +357,19 @@ public class Information {
         return computerID++;
     }
 
+    public static Computer getComputer(long id) {
+        for (Computer c : connectedComputers) {
+            if (c.getId() == id) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public static List<Computer> getConnectedComputers() {
+        return connectedComputers;
+    }
+
     public static void addComputerToList(Computer c) {
         synchronized (synchronizer) {
             connectedComputers.add(c);
@@ -324,6 +396,30 @@ public class Information {
 
     public static void setServerState(String serverState) {
         Information.serverState = serverState;
+    }
+
+    public static void setInfoThread(InformationThread infoThread) {
+        Information.infoThread = infoThread;
+    }
+
+    public static InformationThread getInfoThread() {
+        return infoThread;
+    }
+
+    public static void addTransferedBlenderFile(Long id) {
+        synchronized (synchronizer) {
+            blenderFilesTransfered.add(id);
+        }
+    }
+
+    public static boolean isTransferedBlenderFile(Long id) {
+        for (Long i : blenderFilesTransfered) {
+            if (i.equals(id)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

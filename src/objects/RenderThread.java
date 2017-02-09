@@ -92,6 +92,9 @@ public class RenderThread extends Thread {
             if (Information.isClient()) {
 
                 task = new CopyRenderTask(Information.getLocalComputer().getIpAddress(), Information.getLocalComputer().getPort()).getRenderTask();
+                if (task == null) {
+                    break;
+                }
                 Computer.addTaskToRender(task);
                 if (!new File(BlenderFile.getFilenameById(task.getFile().getId())).exists()) {
                     new CopyBlenderFileThread(Information.getLocalComputer().getIpAddress(), Information.getLocalComputer().getPort(),
@@ -101,7 +104,7 @@ public class RenderThread extends Thread {
             } else {
                 synchronized (Information.getSynchronizer()) {
                     if (!Storage.getRenderTasks().isEmpty()) {
-                        task = Storage.getRenderTasks().removeFirst(); //todo: check if isSlave and gather value
+                        task = Storage.getRenderTasks().removeFirst();
                     } else {
                         break;
                     }
@@ -114,7 +117,7 @@ public class RenderThread extends Thread {
                 continue;
             }
 
-            if (!Storage.getFilesToRender().contains(task.getFile())) {
+            if (!Storage.getFilesToRender().contains(task.getFile()) && !Information.isClient()) {
                 System.out.println("File not in Files to Render: " + task.getFile().getPath().getName());
                 Information.fixTaskList(task.getFile());
                 continue;
@@ -150,8 +153,6 @@ public class RenderThread extends Thread {
 
             pb.redirectErrorStream(true);
 
-            pb.directory(new File("/home/"));
-
             try {
                 Process p = pb.start();
 
@@ -160,6 +161,7 @@ public class RenderThread extends Thread {
 
                 while (bri.readLine() != null) {
                     if (Thread.interrupted()) {
+
                         p.destroy();
                         System.out.println("Thread " + this.getId() + " was shutdown");
                         Storage.getRenderTasks().addFirst(task);
@@ -173,7 +175,9 @@ public class RenderThread extends Thread {
 
             } catch (Exception ex) {
                 synchronized (Information.getSynchronizer()) {
-                    Storage.getRenderTasks().addFirst(task);
+                    if (!Information.isClient()) {
+                        Storage.getRenderTasks().addFirst(task);
+                    }
                 }
             } finally {
                 pythonFile.delete();

@@ -64,6 +64,12 @@ public abstract class ConnectionThread extends Thread {
     }
 
     public void close() {
+        
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException ex) {
+        }
+        
         if (!(this instanceof CheckConnection)) {
             Computer.removeSocket(socket);
         }
@@ -74,10 +80,12 @@ public abstract class ConnectionThread extends Thread {
 
         try {
             socket = new Socket(ipAddress, port);
+            
             sIn = socket.getInputStream();
             sOut = socket.getOutputStream();
 
             sendLine(messageToServer);
+            readLine();
 
         } catch (IOException ex) {
             throw new NetworkException();
@@ -87,7 +95,7 @@ public abstract class ConnectionThread extends Thread {
             Computer.addSocketToList(socket);
         }
 
-        System.out.println("Established Connection");
+//        System.out.println("Established Connection");
 
     }
 
@@ -134,6 +142,7 @@ public abstract class ConnectionThread extends Thread {
         try {
             ObjectOutputStream oOut = new ObjectOutputStream(sOut);
             oOut.writeObject(obj);
+            oOut.flush();
         } catch (IOException ex) {
             throw new NetworkException();
         }
@@ -145,6 +154,7 @@ public abstract class ConnectionThread extends Thread {
             ObjectInputStream oInput = new ObjectInputStream(sIn);
             return oInput.readObject();
         } catch (IOException | ClassNotFoundException ex) {
+//            ex.printStackTrace();
             throw new NetworkException();
         }
     }
@@ -158,6 +168,7 @@ public abstract class ConnectionThread extends Thread {
 
             while ((len = inputStream.read(buffer)) > 0) {
                 sOut.write(buffer, 0, len);
+                sOut.flush();
             }
 
         } catch (IOException ex) {

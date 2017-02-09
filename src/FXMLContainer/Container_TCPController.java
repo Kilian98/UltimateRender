@@ -39,8 +39,6 @@ import javafx.scene.control.ToggleGroup;
 import Server.CopyBlenderFileThread;
 import Server.ServerListenerThread;
 import helpers.Actions;
-import java.io.IOException;
-import java.net.Socket;
 
 /**
  * FXML Controller class
@@ -171,10 +169,9 @@ public class Container_TCPController implements Initializable {
 
     private void stopServer() {
         btn_toggle.setText("Start server");
-
         Information.stopServer();
-
         setTCPState(TCPState.Server);
+        tb_ipAdress.setDisable(true);
     }
 
     private void startClient() {

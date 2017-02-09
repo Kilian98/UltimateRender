@@ -31,6 +31,8 @@ import java.net.SocketException;
  */
 public class ServerListenerThread extends ConnectionThread {
 
+    ServerSocket sSocket;
+    
     public ServerListenerThread(int port) {
         super("", port);
     }
@@ -38,7 +40,7 @@ public class ServerListenerThread extends ConnectionThread {
     @Override
     public void run() {
 
-        ServerSocket sSocket;
+        
 
         try {
             sSocket = new ServerSocket(port);
@@ -57,6 +59,7 @@ public class ServerListenerThread extends ConnectionThread {
                 Information.setsSocket(sSocket);
 
                 changeSocket(sSocket.accept());
+                sendLine("Accepted");
 
                 switch (readLine()) {
                     case Constants.requestBlenderFiles:
@@ -68,16 +71,17 @@ public class ServerListenerThread extends ConnectionThread {
                     case Constants.requestNewJob:
                         copyNewJob();
                         break;
+                    case Constants.sendInformation:
+                        sendInfo();
+                        break;
                 }
 
             } catch (SocketException e) {
                 System.out.println("Server stopped!");
                 System.out.println(e.getMessage());
                 Information.setServerState("Server stopped");
-            } catch (IOException ex) {
-
-            } catch (NetworkException ex) {
-
+            } catch (IOException | NetworkException ex) {
+                ex.printStackTrace();
             }
 
         }
@@ -116,6 +120,14 @@ public class ServerListenerThread extends ConnectionThread {
         try {
             new CopyRenderTask(socket).start();
         } catch (NetworkException e) {
+        }
+    }
+
+    private void sendInfo() {
+        try {
+            new CopyInformation(socket).start();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -42,10 +42,10 @@ public class CopyBlenderFileThread extends ConnectionThread {
         super(s);
     }
 
-    public void runWithoutThread(){
+    public void runWithoutThread() {
         run();
     }
-    
+
     @Override
     public void run() {
 
@@ -53,6 +53,7 @@ public class CopyBlenderFileThread extends ConnectionThread {
 
             try {
 
+                //todo transfere file and wait if file is transferring at the moment
                 establishClientConnction(Constants.requestBlenderFiles); //sends a line as well
                 sendLine(blenderFileId + "");
 
@@ -95,7 +96,7 @@ public class CopyBlenderFileThread extends ConnectionThread {
         }
 
         close();
-        
+
     }
 
 }

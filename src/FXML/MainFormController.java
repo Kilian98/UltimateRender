@@ -238,7 +238,9 @@ public class MainFormController implements Initializable {
         vbox_mid.getChildren().add(root_Information);
         vbox_mid.getChildren().add(new Separator(Orientation.HORIZONTAL));
 
-        new InformationThread().start();
+        InformationThread infoThread = new InformationThread();
+        Information.setInfoThread(infoThread);
+        infoThread.start();
     }
 
     @FXML

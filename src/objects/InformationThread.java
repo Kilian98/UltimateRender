@@ -39,7 +39,7 @@ public class InformationThread extends Thread {
             try {
                 Thread.sleep(Storage.getSettings().getRefreshMillis());
             } catch (InterruptedException ex) {
-                System.out.println("couldn't wait to gather new Information");
+                System.err.println("couldn't wait to gather new Information");
             }
 
             Information.updateInformation();
@@ -47,7 +47,7 @@ public class InformationThread extends Thread {
             Platform.runLater(() -> {
 
                 controller.getLbl_status().setText("Status: " + Information.getStatus().toString());
-                controller.getLbl_renderedFrames().setText("Rendered Frames: " + Information.getFramesRendered());
+                controller.getLbl_renderedFrames().setText("Rendered Frames: " + Information.getAllRenderedFrames());
                 controller.getLbl_remainingFrames().setText("Remaining Frames: " + Information.getFramesRemaining());
 
                 controller.getLbl_localRenderingThreads().setText("Local rendering threads: " + Information.getRenderingThreads());
